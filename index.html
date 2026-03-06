@@ -2,23 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="description" content="Newton-Raphson Method - Advanced Root Finding Calculator">
     <title>Newton-Raphson Method | Advanced Root Finding</title>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+
     <style>
+        /* ═══════════════════════════════════════
+           CSS CUSTOM PROPERTIES
+        ═══════════════════════════════════════ */
         :root {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --accent: #0f4c75;
-            --highlight: #3282b8;
-            --light: #bbe1fa;
-            --text: #e8e8e8;
-            --text-muted: #a0a0a0;
-            --success: #4caf50;
-            --error: #ef5350;
-            --nav-height: 70px;
+            --primary:       #1a1a2e;
+            --secondary:     #16213e;
+            --accent:        #0f4c75;
+            --highlight:     #3282b8;
+            --light:         #bbe1fa;
+            --text:          #e8e8e8;
+            --text-muted:    #a0a0a0;
+            --success:       #4caf50;
+            --error:         #ef5350;
+            --border:        rgba(50, 130, 184, 0.25);
+            --card-bg:       rgba(22, 33, 62, 0.65);
+            --input-bg:      rgba(15, 20, 40, 0.85);
+
+            --nav-h:         64px;
+            --radius-sm:     8px;
+            --radius-md:     14px;
+            --radius-lg:     20px;
+            --radius-xl:     28px;
+
+            /* Fluid type scale — no JS, no breakpoint jumps */
+            --step--1: clamp(0.78rem,  0.72rem + 0.28vw,  0.94rem);
+            --step-0:  clamp(0.9rem,   0.82rem + 0.4vw,   1.1rem);
+            --step-1:  clamp(1rem,     0.9rem  + 0.5vw,   1.25rem);
+            --step-2:  clamp(1.2rem,   1rem    + 1vw,     1.75rem);
+            --step-3:  clamp(1.5rem,   1.1rem  + 2vw,     2.5rem);
+            --step-4:  clamp(1.9rem,   1.2rem  + 3.5vw,   4rem);
+            --step-5:  clamp(2.2rem,   1.3rem  + 4.5vw,   5rem);
+
+            /* Fluid space scale */
+            --space-xs:   clamp(0.4rem,  0.3rem + 0.5vw,  0.75rem);
+            --space-sm:   clamp(0.75rem, 0.6rem + 0.75vw, 1.25rem);
+            --space-md:   clamp(1rem,    0.8rem + 1vw,    1.75rem);
+            --space-lg:   clamp(1.5rem,  1rem   + 2vw,    2.5rem);
+            --space-xl:   clamp(2rem,    1.25rem + 3.5vw, 4rem);
+            --space-2xl:  clamp(3rem,    2rem   + 5vw,    6rem);
         }
 
+        /* ═══════════════════════════════════════
+           RESET & BASE
+        ═══════════════════════════════════════ */
         *, *::before, *::after {
             margin: 0;
             padding: 0;
@@ -27,46 +63,54 @@
 
         html {
             scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
 
         body {
-            font-family: 'Crimson Pro', serif;
+            font-family: 'Crimson Pro', Georgia, serif;
             background: var(--primary);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.65;
             overflow-x: hidden;
+            min-width: 320px;
         }
 
+        /* Geometric grid overlay */
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            inset: 0;
             background:
-                linear-gradient(45deg, transparent 48%, var(--accent) 48%, var(--accent) 52%, transparent 52%),
+                linear-gradient(45deg,  transparent 48%, var(--accent) 48%, var(--accent) 52%, transparent 52%),
                 linear-gradient(-45deg, transparent 48%, var(--accent) 48%, var(--accent) 52%, transparent 52%);
-            background-size: 80px 80px;
-            background-position: 0 0, 40px 40px;
-            opacity: 0.03;
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            opacity: 0.025;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* ─── NAVIGATION ─── */
+        img, svg { display: block; max-width: 100%; }
+
+        /* ═══════════════════════════════════════
+           NAVIGATION
+        ═══════════════════════════════════════ */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            height: var(--nav-height);
-            background: rgba(26, 26, 46, 0.97);
-            backdrop-filter: blur(10px);
-            padding: 0 5%;
+            height: var(--nav-h);
+            background: rgba(14, 14, 28, 0.96);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 0 clamp(1rem, 5vw, 4rem);
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            border-bottom: 1px solid rgba(50, 130, 184, 0.2);
-            animation: slideDown 0.6s ease-out;
+            border-bottom: 1px solid var(--border);
+            animation: slideDown 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         @keyframes slideDown {
@@ -76,113 +120,124 @@
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-size: clamp(1.1rem, 2.5vw, 1.7rem);
             font-weight: 900;
             color: var(--light);
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
+            user-select: none;
             flex-shrink: 0;
+            line-height: 1;
+        }
+        .logo em {
+            color: var(--highlight);
+            font-style: italic;
         }
 
-        .logo span { color: var(--highlight); font-style: italic; }
-
-        /* Desktop nav links */
+        /* ── Desktop nav links ── */
         .nav-links {
             display: flex;
-            gap: 2.5rem;
+            gap: clamp(1.5rem, 3vw, 2.5rem);
             list-style: none;
         }
-
         .nav-links a {
-            color: var(--text);
+            color: var(--text-muted);
             text-decoration: none;
-            font-size: 1.1rem;
-            transition: color 0.3s;
+            font-size: var(--step-0);
+            font-family: 'Crimson Pro', serif;
+            letter-spacing: 0.3px;
+            transition: color 0.25s;
             position: relative;
+            padding-bottom: 4px;
         }
-
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -5px; left: 0;
+            bottom: 0; left: 0;
             width: 0; height: 2px;
-            background: var(--highlight);
-            transition: width 0.3s;
+            background: linear-gradient(90deg, var(--accent), var(--highlight));
+            border-radius: 2px;
+            transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
-
-        .nav-links a:hover { color: var(--light); }
+        .nav-links a:hover,
+        .nav-links a:focus { color: var(--light); outline: none; }
         .nav-links a:hover::after { width: 100%; }
 
-        /* Hamburger */
+        /* ── Hamburger ── */
         .hamburger {
             display: none;
             flex-direction: column;
-            justify-content: space-between;
-            width: 26px;
-            height: 18px;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            padding: 6px;
             cursor: pointer;
             background: none;
             border: none;
-            padding: 0;
-            z-index: 1100;
+            border-radius: var(--radius-sm);
+            transition: background 0.2s;
         }
-
+        .hamburger:hover,
+        .hamburger:focus { background: rgba(50, 130, 184, 0.12); outline: none; }
         .hamburger span {
             display: block;
             height: 2px;
             background: var(--light);
             border-radius: 2px;
-            transition: all 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
             transform-origin: center;
         }
-
-        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* Mobile menu overlay */
+        /* ── Mobile slide-down menu ── */
         .mobile-menu {
             display: none;
             position: fixed;
-            top: var(--nav-height);
+            top: var(--nav-h);
             left: 0;
             width: 100%;
-            background: rgba(22, 33, 62, 0.98);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(50, 130, 184, 0.3);
-            z-index: 999;
-            padding: 1.5rem 5%;
+            background: rgba(12, 16, 32, 0.98);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            z-index: 990;
+            padding: var(--space-md) clamp(1rem, 5vw, 4rem);
             flex-direction: column;
-            gap: 1.5rem;
-            animation: menuSlide 0.25s ease-out;
+            gap: 0;
         }
-
-        .mobile-menu.open { display: flex; }
-
+        .mobile-menu.open {
+            display: flex;
+            animation: menuSlide 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
         @keyframes menuSlide {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-8px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-
         .mobile-menu a {
             color: var(--text);
             text-decoration: none;
-            font-size: 1.3rem;
+            font-size: var(--step-2);
             font-family: 'Playfair Display', serif;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(50, 130, 184, 0.15);
-            transition: color 0.2s;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid rgba(50, 130, 184, 0.1);
+            transition: color 0.2s, padding-left 0.2s;
+            display: block;
         }
+        .mobile-menu a:last-child { border-bottom: none; }
+        .mobile-menu a:hover { color: var(--light); padding-left: 6px; }
 
-        .mobile-menu a:hover { color: var(--light); }
-
-        /* ─── LANDING ─── */
+        /* ═══════════════════════════════════════
+           LANDING PAGE
+        ═══════════════════════════════════════ */
         .landing {
             position: relative;
-            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: calc(var(--nav-height) + 3rem) 5% 4rem;
+            padding: calc(var(--nav-h) + var(--space-xl)) clamp(1rem, 5vw, 4rem) var(--space-xl);
         }
 
         .hero {
@@ -190,391 +245,563 @@
             width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: var(--space-xl);
             align-items: center;
         }
 
-        .hero-content { animation: fadeInLeft 0.8s ease-out 0.2s both; }
-
+        .hero-content {
+            animation: fadeInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+        }
         @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
+            from { opacity: 0; transform: translateX(-40px); }
             to   { opacity: 1; transform: translateX(0); }
         }
 
         .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.2rem, 5vw, 5rem);
+            font-size: var(--step-5);
             font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+            line-height: 1.08;
+            margin-bottom: var(--space-sm);
             color: var(--light);
-            letter-spacing: -2px;
+            letter-spacing: -1.5px;
+        }
+        .hero-title .highlight {
+            color: var(--highlight);
+            display: block;
+            font-style: italic;
         }
 
-        .hero-title .highlight { color: var(--highlight); display: block; font-style: italic; }
-
         .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-size: var(--step-2);
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--space-sm);
             font-weight: 300;
         }
 
         .hero-description {
-            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            font-size: var(--step-1);
             color: var(--text);
-            margin-bottom: 2.5rem;
+            margin-bottom: var(--space-lg);
             line-height: 1.8;
         }
 
         .cta-button {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             background: linear-gradient(135deg, var(--accent), var(--highlight));
-            color: white;
-            padding: clamp(0.9rem, 2vw, 1.2rem) clamp(1.8rem, 4vw, 3rem);
-            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: #fff;
+            padding: clamp(0.75rem, 2vw, 1.1rem) clamp(1.5rem, 4vw, 2.8rem);
+            font-size: var(--step-1);
             font-weight: 600;
+            font-family: 'Crimson Pro', serif;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(50, 130, 184, 0.3);
+            transition: transform 0.25s, box-shadow 0.25s;
+            box-shadow: 0 8px 28px rgba(50, 130, 184, 0.32);
+            white-space: nowrap;
         }
-
-        .cta-button:hover {
+        .cta-button:hover,
+        .cta-button:focus {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(50, 130, 184, 0.5);
+            box-shadow: 0 14px 38px rgba(50, 130, 184, 0.5);
+            outline: none;
         }
+        .cta-button:active { transform: translateY(-1px); }
 
-        /* Formula card */
-        .hero-visual { animation: fadeInRight 0.8s ease-out 0.4s both; }
-
+        /* ── Formula card ── */
+        .hero-visual {
+            animation: fadeInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+        }
         @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(50px); }
+            from { opacity: 0; transform: translateX(40px); }
             to   { opacity: 1; transform: translateX(0); }
         }
 
         .formula-container {
-            background: rgba(22, 33, 62, 0.6);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(50, 130, 184, 0.3);
-            border-radius: 20px;
-            padding: clamp(1.5rem, 4vw, 3rem);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
         .formula {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(1.1rem, 2.5vw, 2.5rem);
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: clamp(1rem, 3vw, 2.2rem);
             text-align: center;
             color: var(--light);
-            margin-bottom: 1.5rem;
-            letter-spacing: 2px;
+            margin-bottom: var(--space-sm);
+            letter-spacing: 1px;
             overflow-wrap: break-word;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .formula sub {
+            font-size: 0.65em;
+            vertical-align: sub;
         }
 
         .formula-label {
             text-align: center;
             color: var(--text-muted);
-            font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+            font-size: var(--step-0);
             font-style: italic;
         }
 
-        /* ─── FEATURES ─── */
+        /* Formula decorative dots */
+        .formula-container::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--highlight));
+            border-radius: 2px;
+            margin: 0 auto var(--space-md);
+        }
+
+        /* ═══════════════════════════════════════
+           FEATURES SECTION
+        ═══════════════════════════════════════ */
         .features {
-            padding: clamp(3rem, 6vw, 6rem) 5%;
+            padding: var(--space-2xl) clamp(1rem, 5vw, 4rem);
             background: var(--secondary);
             position: relative;
+        }
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-size: var(--step-4);
             font-weight: 900;
             text-align: center;
-            margin-bottom: clamp(2rem, 4vw, 4rem);
+            margin-bottom: var(--space-xl);
             color: var(--light);
+            letter-spacing: -0.5px;
         }
 
         .features-grid {
             max-width: 1400px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            gap: var(--space-md);
         }
 
         .feature-card {
-            background: rgba(26, 26, 46, 0.5);
-            border: 1px solid rgba(50, 130, 184, 0.2);
-            border-radius: 15px;
-            padding: clamp(1.5rem, 3vw, 2.5rem);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease-out both;
+            background: rgba(26, 26, 46, 0.55);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+            position: relative;
+            overflow: hidden;
         }
-
-        .feature-card:nth-child(1) { animation-delay: 0.1s; }
-        .feature-card:nth-child(2) { animation-delay: 0.2s; }
-        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--highlight));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .feature-card:nth-child(1) { animation-delay: 0.05s; }
+        .feature-card:nth-child(2) { animation-delay: 0.12s; }
+        .feature-card:nth-child(3) { animation-delay: 0.19s; }
+        .feature-card:hover { transform: translateY(-8px); border-color: rgba(50,130,184,0.5); box-shadow: 0 16px 40px rgba(50,130,184,0.18); }
+        .feature-card:hover::after { opacity: 1; }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(28px); }
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--highlight);
-            box-shadow: 0 15px 40px rgba(50, 130, 184, 0.2);
+        .feature-icon {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: var(--space-sm);
+            line-height: 1;
+        }
+        .feature-title {
+            font-family: 'Playfair Display', serif;
+            font-size: var(--step-2);
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+            color: var(--light);
+        }
+        .feature-description {
+            font-size: var(--step-0);
+            color: var(--text-muted);
+            line-height: 1.72;
         }
 
-        .feature-icon { font-size: clamp(2rem, 3vw, 3rem); margin-bottom: 1.2rem; }
-        .feature-title { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2vw, 1.8rem); font-weight: 700; margin-bottom: 1rem; color: var(--light); }
-        .feature-description { font-size: clamp(0.95rem, 1.2vw, 1.1rem); color: var(--text-muted); line-height: 1.7; }
-
-        /* ─── CALCULATOR PAGE ─── */
+        /* ═══════════════════════════════════════
+           CALCULATOR PAGE
+        ═══════════════════════════════════════ */
         .calculator-page {
             display: none;
-            min-height: 100vh;
-            padding: calc(var(--nav-height) + 3rem) 5% 4rem;
+            min-height: 100dvh;
+            padding: calc(var(--nav-h) + var(--space-xl)) clamp(1rem, 5vw, 4rem) var(--space-xl);
         }
-
         .calculator-page.active {
             display: block;
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeIn 0.4s ease-out both;
         }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .calculator-container { max-width: 1200px; margin: 0 auto; }
-
-        .calculator-header { text-align: center; margin-bottom: clamp(2rem, 4vw, 4rem); }
-
-        .calculator-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.8rem, 4vw, 4rem);
-            font-weight: 900;
-            color: var(--light);
-            margin-bottom: 0.75rem;
+        .calculator-container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .calculator-subtitle { font-size: clamp(1rem, 1.5vw, 1.3rem); color: var(--text-muted); }
+        .calculator-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+        .calculator-title {
+            font-family: 'Playfair Display', serif;
+            font-size: var(--step-4);
+            font-weight: 900;
+            color: var(--light);
+            margin-bottom: var(--space-xs);
+            letter-spacing: -0.5px;
+        }
+        .calculator-subtitle {
+            font-size: var(--step-1);
+            color: var(--text-muted);
+        }
 
+        /* ── Two-column → single-column grid ── */
         .calculator-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: clamp(1.5rem, 3vw, 3rem);
-            margin-bottom: 3rem;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
         }
 
-        .input-section, .output-section {
-            background: rgba(22, 33, 62, 0.6);
+        /* ── Shared card style ── */
+        .input-section,
+        .output-section {
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(50, 130, 184, 0.3);
-            border-radius: 20px;
-            padding: clamp(1.2rem, 3vw, 2.5rem);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            /* Prevent internal overflow from escaping */
+            min-width: 0;
+            overflow: hidden;
         }
 
         .section-heading {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.3rem, 2.5vw, 2rem);
+            font-size: var(--step-3);
             font-weight: 700;
             color: var(--light);
-            margin-bottom: clamp(1.2rem, 2vw, 2rem);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-xs);
             border-bottom: 2px solid var(--highlight);
-            padding-bottom: 0.5rem;
         }
 
-        .input-group { margin-bottom: 1.3rem; }
-
+        /* ── Input fields ── */
+        .input-group { margin-bottom: var(--space-sm); }
         .input-group label {
             display: block;
-            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+            font-size: var(--step-0);
             color: var(--text);
-            margin-bottom: 0.4rem;
+            margin-bottom: 5px;
             font-weight: 500;
+            letter-spacing: 0.2px;
         }
-
         .input-group input {
             width: 100%;
-            padding: clamp(0.6rem, 1vw, 1rem);
-            background: rgba(26, 26, 46, 0.8);
-            border: 1px solid rgba(50, 130, 184, 0.3);
-            border-radius: 10px;
+            padding: clamp(0.55rem, 1.2vw, 0.9rem) clamp(0.7rem, 1.5vw, 1rem);
+            background: var(--input-bg);
+            border: 1.5px solid rgba(50, 130, 184, 0.28);
+            border-radius: var(--radius-md);
             color: var(--text);
             font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(0.85rem, 1vw, 1rem);
-            transition: all 0.3s ease;
+            font-size: var(--step-0);
+            transition: border-color 0.25s, box-shadow 0.25s;
+            /* Prevent zoom on iOS (font-size ≥ 16px equivalent) */
+            -webkit-appearance: none;
+            appearance: none;
         }
-
         .input-group input:focus {
             outline: none;
             border-color: var(--highlight);
-            box-shadow: 0 0 20px rgba(50, 130, 184, 0.3);
+            box-shadow: 0 0 0 3px rgba(50, 130, 184, 0.18);
         }
+        .input-group input::placeholder { color: rgba(160, 160, 160, 0.55); }
+
+        /* Number inputs — hide spinners for cleaner mobile look */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { opacity: 0.4; }
 
         .calculate-btn {
+            display: block;
             width: 100%;
-            padding: clamp(0.8rem, 1.5vw, 1.2rem);
+            padding: clamp(0.8rem, 2vw, 1.1rem);
             background: linear-gradient(135deg, var(--accent), var(--highlight));
-            color: white;
+            color: #fff;
             border: none;
-            border-radius: 10px;
-            font-size: clamp(1rem, 1.2vw, 1.2rem);
+            border-radius: var(--radius-md);
+            font-size: var(--step-1);
             font-weight: 600;
+            font-family: 'Crimson Pro', serif;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 0.8rem;
+            transition: transform 0.22s, box-shadow 0.22s, filter 0.22s;
+            margin-top: var(--space-sm);
+            box-shadow: 0 6px 20px rgba(50, 130, 184, 0.28);
+            letter-spacing: 0.3px;
         }
-
-        .calculate-btn:hover {
+        .calculate-btn:hover,
+        .calculate-btn:focus {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(50, 130, 184, 0.4);
+            box-shadow: 0 10px 28px rgba(50, 130, 184, 0.42);
+            outline: none;
         }
+        .calculate-btn:active { transform: translateY(0); filter: brightness(0.92); }
 
+        /* ── Results ── */
         .result-display {
-            background: rgba(26, 26, 46, 0.8);
-            border-radius: 10px;
-            padding: clamp(1rem, 2vw, 2rem);
-            margin-bottom: 1.2rem;
+            background: var(--input-bg);
+            border-radius: var(--radius-md);
+            padding: var(--space-sm) var(--space-md);
+            margin-bottom: var(--space-sm);
             border-left: 4px solid var(--highlight);
         }
+        .result-label {
+            font-size: var(--step--1);
+            color: var(--text-muted);
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .result-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step-2);
+            color: var(--light);
+            font-weight: 500;
+            word-break: break-all;
+            overflow-wrap: anywhere;
+        }
 
-        .result-label { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 1px; }
-        .result-value { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.2rem, 2vw, 1.8rem); color: var(--light); font-weight: 500; word-break: break-all; }
-
-        .iterations-table { margin-top: 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-        .iterations-table table { width: 100%; border-collapse: collapse; min-width: 420px; }
-
+        /* ── Iterations table — horizontally scrollable on mobile ── */
+        .iterations-table {
+            margin-top: var(--space-md);
+            /* The outer wrapper scrolls, not the page */
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            /* Subtle scroll hint shadow */
+            background:
+                linear-gradient(to right, var(--input-bg) 30%, transparent),
+                linear-gradient(to right, transparent, var(--input-bg) 70%) 100% 0,
+                radial-gradient(farthest-side at 0% 50%, rgba(50,130,184,0.18), transparent),
+                radial-gradient(farthest-side at 100% 50%, rgba(50,130,184,0.18), transparent) 100% 0;
+            background-repeat: no-repeat;
+            background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+            background-attachment: local, local, scroll, scroll;
+        }
+        .iterations-table table {
+            width: 100%;
+            border-collapse: collapse;
+            /* Minimum width prevents squishing; table scrolls instead */
+            min-width: 400px;
+            font-size: var(--step--1);
+        }
+        .iterations-table thead { position: sticky; top: 0; z-index: 1; }
         .iterations-table th,
         .iterations-table td {
-            padding: clamp(0.5rem, 1vw, 1rem);
+            padding: clamp(0.45rem, 1vw, 0.85rem) clamp(0.5rem, 1.2vw, 1rem);
             text-align: left;
-            border-bottom: 1px solid rgba(50, 130, 184, 0.2);
+            border-bottom: 1px solid rgba(50, 130, 184, 0.15);
             white-space: nowrap;
+            font-family: 'JetBrains Mono', monospace;
         }
-
         .iterations-table th {
-            background: rgba(50, 130, 184, 0.2);
+            background: rgba(15, 76, 117, 0.55);
             color: var(--light);
             font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(0.75rem, 1vw, 0.9rem);
+            font-size: var(--step--1);
+            letter-spacing: 0.3px;
         }
+        .iterations-table td { color: var(--text); }
+        .iterations-table tbody tr:hover { background: rgba(50, 130, 184, 0.07); }
+        .iterations-table tbody tr:last-child td { border-bottom: none; }
 
-        .iterations-table td {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text);
-            font-size: clamp(0.8rem, 1vw, 0.95rem);
-        }
-
+        /* ── Error message ── */
         .error-message {
-            background: rgba(239, 83, 80, 0.2);
-            border: 1px solid var(--error);
-            border-radius: 10px;
-            padding: 1.5rem;
-            color: var(--error);
-            margin-top: 1rem;
+            background: rgba(239, 83, 80, 0.12);
+            border: 1px solid rgba(239, 83, 80, 0.5);
+            border-radius: var(--radius-md);
+            padding: var(--space-sm) var(--space-md);
+            color: #ff8a88;
+            font-size: var(--step-0);
+            margin-top: var(--space-sm);
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
         }
+        .error-message::before { content: '⚠'; flex-shrink: 0; }
 
+        /* ── Visualization panel ── */
         .visualization {
-            margin-top: 2rem;
-            background: rgba(22, 33, 62, 0.6);
+            margin-top: var(--space-lg);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(50, 130, 184, 0.3);
-            border-radius: 20px;
-            padding: clamp(1.2rem, 3vw, 2.5rem);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            overflow: hidden;
         }
 
+        /* Canvas fills its container; height adapts via clamp */
         canvas {
-            width: 100% !important;
-            height: clamp(200px, 40vw, 400px);
-            border-radius: 10px;
             display: block;
+            width: 100% !important;
+            height: clamp(180px, 35vw, 380px) !important;
+            border-radius: var(--radius-md);
         }
 
+        /* ── Placeholder text ── */
+        .placeholder-text {
+            color: var(--text-muted);
+            text-align: center;
+            padding: clamp(1.5rem, 6vw, 3.5rem) var(--space-md);
+            font-size: var(--step-0);
+            font-style: italic;
+            line-height: 1.7;
+        }
+
+        /* ── Utility ── */
         .hidden { display: none !important; }
 
-        /* ─── RESPONSIVE BREAKPOINTS ─── */
+        /* ═══════════════════════════════════════
+           RESPONSIVE BREAKPOINTS
+        ═══════════════════════════════════════ */
 
-        /* Tablet landscape & small desktop */
-        @media (max-width: 1024px) {
-            nav { padding: 0 4%; }
-            .landing { padding: calc(var(--nav-height) + 2.5rem) 4% 3rem; }
-            .features { padding: clamp(2.5rem, 5vw, 5rem) 4%; }
-            .calculator-page { padding: calc(var(--nav-height) + 2.5rem) 4% 3rem; }
+        /* ── Large tablet / small laptop ── */
+        @media (max-width: 1100px) {
+            .hero-title { letter-spacing: -1px; }
         }
 
-        /* Tablet portrait */
-        @media (max-width: 900px) {
-            .hero { grid-template-columns: 1fr; gap: 2.5rem; }
+        /* ── Tablet portrait — stack hero ── */
+        @media (max-width: 860px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+                text-align: center;
+            }
+            .hero-visual { order: 2; max-width: 520px; margin: 0 auto; width: 100%; }
             .hero-content { order: 1; }
-            .hero-visual  { order: 2; }
+            .cta-button { display: inline-flex; }
 
+            /* Stack calculator panels */
             .calculator-grid { grid-template-columns: 1fr; }
         }
 
-        /* Mobile – show hamburger, hide desktop nav */
+        /* ── Mobile — hamburger, compact everything ── */
         @media (max-width: 640px) {
-            :root { --nav-height: 60px; }
+            :root {
+                --nav-h: 58px;
+            }
 
-            nav { padding: 0 4%; }
+            /* Show hamburger, hide desktop links */
+            .hamburger  { display: flex; }
+            .nav-links  { display: none; }
 
-            .nav-links { display: none; }
-            .hamburger { display: flex; }
+            /* Full-width CTA */
+            .cta-button { width: 100%; }
 
-            .landing { padding: calc(var(--nav-height) + 2rem) 4% 2rem; min-height: auto; }
-            .features { padding: 2.5rem 4%; }
-            .calculator-page { padding: calc(var(--nav-height) + 2rem) 4% 2rem; }
+            /* Ensure table is readable with scroll hint visible */
+            .iterations-table { border-radius: var(--radius-sm); }
 
-            .hero { gap: 2rem; }
+            /* Tighten card padding on mobile */
+            .input-section,
+            .output-section,
+            .visualization {
+                border-radius: var(--radius-lg);
+                padding: var(--space-md);
+            }
 
-            .hero-title { letter-spacing: -1px; }
-
-            .cta-button { width: 100%; text-align: center; }
-
+            /* Features single column */
             .features-grid { grid-template-columns: 1fr; }
-
-            .calculator-grid { grid-template-columns: 1fr; gap: 1.5rem; }
         }
 
-        /* Small phones */
+        /* ── Small phones (320–400px) ── */
         @media (max-width: 400px) {
-            nav { padding: 0 3%; }
-            .landing { padding: calc(var(--nav-height) + 1.5rem) 3% 1.5rem; }
-            .features { padding: 2rem 3%; }
-            .calculator-page { padding: calc(var(--nav-height) + 1.5rem) 3% 1.5rem; }
+            .formula { font-size: clamp(0.85rem, 4vw, 1.1rem); }
+            .hero-title { letter-spacing: -0.5px; }
+
+            /* Prevent table columns from wrapping oddly */
+            .iterations-table table { min-width: 340px; }
+
+            .input-section,
+            .output-section,
+            .formula-container,
+            .visualization {
+                border-radius: var(--radius-md);
+            }
+        }
+
+        /* ── Touch devices — increase tap targets ── */
+        @media (hover: none) and (pointer: coarse) {
+            .input-group input { padding: 0.85rem 0.9rem; font-size: 1rem; }
+            .calculate-btn     { padding: 1rem; font-size: 1.05rem; }
+            .mobile-menu a     { padding: 1rem 0; }
+        }
+
+        /* ── Reduced motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="logo">Newton<span>Raphson</span></div>
+    <!-- ═══ NAVIGATION ═══ -->
+    <nav role="banner">
+        <div class="logo" aria-label="Newton-Raphson">Newton<em>Raphson</em></div>
 
-        <!-- Desktop nav -->
-        <ul class="nav-links">
-            <li><a href="#" data-page="landing">Home</a></li>
-            <li><a href="#" data-page="calculator">Calculator</a></li>
+        <ul class="nav-links" role="list">
+            <li><a href="#" data-page="landing" aria-label="Home">Home</a></li>
+            <li><a href="#" data-page="calculator" aria-label="Calculator">Calculator</a></li>
         </ul>
 
-        <!-- Hamburger button (mobile) -->
-        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu">
             <span></span><span></span><span></span>
         </button>
     </nav>
 
-    <!-- Mobile menu -->
-    <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+    <!-- ═══ MOBILE MENU ═══ -->
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
         <a href="#" data-page="landing">Home</a>
         <a href="#" data-page="calculator">Calculator</a>
-    </div>
+    </nav>
 
-    <!-- Landing Page -->
-    <section class="landing" id="landing-page">
+    <!-- ═══ LANDING ═══ -->
+    <section class="landing" id="landing-page" aria-label="Hero section">
         <div class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">
@@ -583,16 +810,18 @@
                 </h1>
                 <p class="hero-subtitle">Advanced numerical root-finding algorithm</p>
                 <p class="hero-description">
-                    The Newton-Raphson method is a powerful iterative technique for finding successively
-                    better approximations to the roots of a real-valued function. Experience fast convergence
-                    and mathematical elegance in solving complex equations.
+                    The Newton-Raphson method is a powerful iterative technique for finding
+                    successively better approximations to the roots of a real-valued function.
+                    Experience fast convergence and mathematical elegance.
                 </p>
-                <a href="#" class="cta-button" data-page="calculator">Start Computing</a>
+                <a href="#" class="cta-button" data-page="calculator" role="button">
+                    Start Computing →
+                </a>
             </div>
             <div class="hero-visual">
-                <div class="formula-container">
+                <div class="formula-container" role="img" aria-label="Newton-Raphson iterative formula">
                     <div class="formula">
-                        x<sub>n+1</sub> = x<sub>n</sub> &minus; f(x<sub>n</sub>)/f&prime;(x<sub>n</sub>)
+                        x<sub>n+1</sub> = x<sub>n</sub> &minus; f(x<sub>n</sub>) / f&prime;(x<sub>n</sub>)
                     </div>
                     <p class="formula-label">The iterative formula for convergence</p>
                 </div>
@@ -600,388 +829,486 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
-        <h2 class="section-title">Why Newton-Raphson?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
+    <!-- ═══ FEATURES ═══ -->
+    <section class="features" aria-labelledby="features-heading">
+        <h2 class="section-title" id="features-heading">Why Newton-Raphson?</h2>
+        <div class="features-grid" role="list">
+            <article class="feature-card" role="listitem">
+                <div class="feature-icon" aria-hidden="true">⚡</div>
                 <h3 class="feature-title">Rapid Convergence</h3>
                 <p class="feature-description">
                     Achieves quadratic convergence near the root, making it one of the fastest
                     root-finding algorithms available for smooth functions.
                 </p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
+            </article>
+            <article class="feature-card" role="listitem">
+                <div class="feature-icon" aria-hidden="true">🎯</div>
                 <h3 class="feature-title">High Precision</h3>
                 <p class="feature-description">
                     Delivers accurate results with minimal iterations, perfect for applications
                     requiring exact solutions in engineering and scientific computing.
                 </p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
+            </article>
+            <article class="feature-card" role="listitem">
+                <div class="feature-icon" aria-hidden="true">📊</div>
                 <h3 class="feature-title">Iterative Insight</h3>
                 <p class="feature-description">
                     Track the convergence process step-by-step with detailed iteration tables
-                    and visualizations for better understanding.
+                    and visualizations for deep mathematical understanding.
                 </p>
-            </div>
+            </article>
         </div>
     </section>
 
-    <!-- Calculator Page -->
-    <section class="calculator-page" id="calculator-page">
+    <!-- ═══ CALCULATOR ═══ -->
+    <section class="calculator-page" id="calculator-page" aria-label="Calculator">
         <div class="calculator-container">
-            <div class="calculator-header">
+
+            <header class="calculator-header">
                 <h1 class="calculator-title">Newton-Raphson Calculator</h1>
                 <p class="calculator-subtitle">Enter your function and parameters to find the root</p>
-            </div>
+            </header>
 
             <div class="calculator-grid">
+
+                <!-- Input panel -->
                 <div class="input-section">
                     <h2 class="section-heading">Input Parameters</h2>
 
                     <div class="input-group">
-                        <label for="function">Function f(x)</label>
-                        <input type="text" id="function" placeholder="e.g., e^x - 3*x or x^3 - 2*x - 5" value="x^3 - 2*x - 5">
+                        <label for="func">Function f(x)</label>
+                        <input type="text" id="func"
+                               placeholder="e.g., x^3 - 2*x - 5"
+                               value="x^3 - 2*x - 5"
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                     </div>
 
                     <div class="input-group">
-                        <label for="derivative">Derivative f'(x) (optional)</label>
-                        <input type="text" id="derivative" placeholder="e.g., 3*x^2 - 2">
+                        <label for="derivative">Derivative f&prime;(x) <span style="color:var(--text-muted);font-weight:300">(optional)</span></label>
+                        <input type="text" id="derivative"
+                               placeholder="e.g., 3*x^2 - 2  (auto if blank)"
+                               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                     </div>
 
                     <div class="input-group">
-                        <label for="initial">Initial Guess (x₀)</label>
-                        <input type="number" id="initial" placeholder="e.g., 2" value="2" step="0.1">
+                        <label for="initial">Initial Guess (x&#8320;)</label>
+                        <input type="number" id="initial"
+                               placeholder="e.g., 2"
+                               value="2" step="0.1"
+                               inputmode="decimal">
                     </div>
 
                     <div class="input-group">
                         <label for="decimalPlaces">Decimal Places</label>
-                        <input type="number" id="decimalPlaces" placeholder="e.g., 6" value="6" min="1" max="15">
+                        <input type="number" id="decimalPlaces"
+                               placeholder="1 – 15"
+                               value="6" min="1" max="15"
+                               inputmode="numeric">
                     </div>
 
                     <div class="input-group">
                         <label for="maxIterations">Maximum Iterations</label>
-                        <input type="number" id="maxIterations" placeholder="e.g., 50" value="50" min="1">
+                        <input type="number" id="maxIterations"
+                               placeholder="e.g., 50"
+                               value="50" min="1"
+                               inputmode="numeric">
                     </div>
 
-                    <button class="calculate-btn" onclick="calculate()">Calculate Root</button>
+                    <button class="calculate-btn" onclick="calculate()" type="button">
+                        Calculate Root
+                    </button>
                 </div>
 
+                <!-- Output panel -->
                 <div class="output-section">
                     <h2 class="section-heading">Results</h2>
                     <div id="results">
-                        <p style="color: var(--text-muted); text-align: center; padding: 3rem 1rem;">
-                            Enter your parameters and click "Calculate Root" to see the results.
+                        <p class="placeholder-text">
+                            Enter your parameters and press<br>
+                            <strong style="color:var(--light)">"Calculate Root"</strong> to see results.
                         </p>
                     </div>
                 </div>
-            </div>
 
+            </div><!-- /.calculator-grid -->
+
+            <!-- Convergence chart -->
             <div class="visualization hidden" id="visualization">
                 <h2 class="section-heading">Convergence Visualization</h2>
-                <canvas id="convergenceChart"></canvas>
+                <canvas id="convergenceChart" role="img" aria-label="Error convergence chart"></canvas>
             </div>
-        </div>
+
+        </div><!-- /.calculator-container -->
     </section>
 
+    <!-- ═══════════════════════════════════════
+         JAVASCRIPT
+    ═══════════════════════════════════════ -->
     <script>
-        /* ── Hamburger / mobile menu ── */
-        const hamburger   = document.getElementById('hamburger');
-        const mobileMenu  = document.getElementById('mobile-menu');
+    'use strict';
 
-        hamburger.addEventListener('click', () => {
-            const isOpen = mobileMenu.classList.toggle('open');
-            hamburger.classList.toggle('open', isOpen);
-            hamburger.setAttribute('aria-expanded', isOpen);
+    /* ─────────────────────────────────────────
+       HAMBURGER / MOBILE MENU
+    ───────────────────────────────────────── */
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.toggle('open');
+        hamburger.classList.toggle('open', isOpen);
+        hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    function closeMobileMenu() {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileMenu));
+
+    /* ─────────────────────────────────────────
+       PAGE NAVIGATION
+    ───────────────────────────────────────── */
+    const landingPage    = document.getElementById('landing-page');
+    const featuresSection = document.querySelector('.features');
+    const calculatorPage = document.getElementById('calculator-page');
+
+    function showPage(page) {
+        if (page === 'landing') {
+            landingPage.style.display    = 'flex';
+            featuresSection.style.display = 'block';
+            calculatorPage.classList.remove('active');
+        } else if (page === 'calculator') {
+            landingPage.style.display    = 'none';
+            featuresSection.style.display = 'none';
+            calculatorPage.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+        closeMobileMenu();
+    }
+
+    document.querySelectorAll('[data-page]').forEach(el => {
+        el.addEventListener('click', e => {
+            e.preventDefault();
+            showPage(e.currentTarget.getAttribute('data-page'));
+        });
+    });
+
+    /* ─────────────────────────────────────────
+       EXPRESSION PARSER
+    ───────────────────────────────────────── */
+    function parseExpression(expr) {
+        // Protect 'exp(...)' before swapping bare 'e'
+        expr = expr.replace(/\bexp\b/gi, '__EXP__');
+        // Euler's number — only when standing alone
+        expr = expr.replace(/\be\b/g, 'Math.E');
+        expr = expr.replace(/__EXP__/g, 'Math.exp');
+        expr = expr.replace(/\^/g, '**');
+        expr = expr.replace(/\bsin\b/gi,  'Math.sin');
+        expr = expr.replace(/\bcos\b/gi,  'Math.cos');
+        expr = expr.replace(/\btan\b/gi,  'Math.tan');
+        expr = expr.replace(/\bln\b/gi,   'Math.log');
+        expr = expr.replace(/\blog\b/gi,  'Math.log10');
+        expr = expr.replace(/\bsqrt\b/gi, 'Math.sqrt');
+        expr = expr.replace(/\babs\b/gi,  'Math.abs');
+        expr = expr.replace(/\bpi\b/gi,   'Math.PI');
+
+        // eslint-disable-next-line no-new-func
+        return new Function('x', `"use strict"; try { return ${expr}; } catch(e) { throw new Error('Invalid expression'); }`);
+    }
+
+    /* ─────────────────────────────────────────
+       NUMERICAL DERIVATIVE
+    ───────────────────────────────────────── */
+    function numericalDerivative(f, x, h = 1e-5) {
+        return (f(x + h) - f(x - h)) / (2 * h);
+    }
+
+    /* ─────────────────────────────────────────
+       NEWTON-RAPHSON CORE
+    ───────────────────────────────────────── */
+    function newtonRaphson(f, fPrime, x0, tolerance, maxIter) {
+        const iters = [];
+        let x = x0;
+
+        for (let i = 0; i < maxIter; i++) {
+            const fx  = f(x);
+            const fpx = fPrime(x);
+
+            if (!isFinite(fx) || !isFinite(fpx))
+                throw new Error('Function produced a non-finite value. Check your expression.');
+            if (Math.abs(fpx) < 1e-14)
+                throw new Error('Derivative is zero or near-zero. Method cannot continue.');
+
+            const xNew  = x - fx / fpx;
+            const error = Math.abs(xNew - x);
+
+            iters.push({ iteration: i + 1, x, fx, fpx, xNew, error });
+
+            if (error < tolerance)
+                return { root: xNew, iterations: iters, converged: true };
+
+            x = xNew;
+        }
+        return { root: x, iterations: iters, converged: false };
+    }
+
+    /* ─────────────────────────────────────────
+       CALCULATE (entry point)
+    ───────────────────────────────────────── */
+    function calculate() {
+        try {
+            // Note: input id changed from 'function' (reserved word) to 'func'
+            const functionStr   = document.getElementById('func').value.trim();
+            const derivativeStr = document.getElementById('derivative').value.trim();
+            const initial       = parseFloat(document.getElementById('initial').value);
+            const decPlaces     = parseInt(document.getElementById('decimalPlaces').value, 10);
+            const maxIter       = parseInt(document.getElementById('maxIterations').value, 10);
+
+            if (!functionStr)          throw new Error('Please enter a function f(x).');
+            if (isNaN(initial))        throw new Error('Initial guess must be a valid number.');
+            if (isNaN(decPlaces) || decPlaces < 1 || decPlaces > 15)
+                throw new Error('Decimal places must be between 1 and 15.');
+            if (isNaN(maxIter) || maxIter < 1)
+                throw new Error('Maximum iterations must be at least 1.');
+
+            const f      = parseExpression(functionStr);
+            const fPrime = derivativeStr
+                ? parseExpression(derivativeStr)
+                : xVal => numericalDerivative(f, xVal);
+
+            const tolerance = Math.pow(10, -(decPlaces + 2));
+            const result    = newtonRaphson(f, fPrime, initial, tolerance, maxIter);
+
+            displayResults(result, decPlaces);
+
+        } catch (err) {
+            displayError(err.message || String(err));
+        }
+    }
+
+    /* ─────────────────────────────────────────
+       DISPLAY RESULTS
+    ───────────────────────────────────────── */
+    function displayResults(result, decPlaces) {
+        window._lastIterations = result.iterations; // store for resize redraws
+
+        const formattedRoot = result.root.toFixed(decPlaces);
+        const statusColor   = result.converged ? 'var(--success)' : 'var(--error)';
+        const statusText    = result.converged ? '✓ Converged' : '✗ Max iterations reached';
+
+        let html = `
+            <div class="result-display">
+                <div class="result-label">Root (x)</div>
+                <div class="result-value">${formattedRoot}</div>
+            </div>
+            <div class="result-display">
+                <div class="result-label">Iterations Used</div>
+                <div class="result-value">${result.iterations.length}</div>
+            </div>
+            <div class="result-display">
+                <div class="result-label">Status</div>
+                <div class="result-value" style="color:${statusColor}">${statusText}</div>
+            </div>
+            <div class="iterations-table" role="region" aria-label="Iteration details" tabindex="0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">n</th>
+                            <th scope="col">x<sub>n</sub></th>
+                            <th scope="col">f(x<sub>n</sub>)</th>
+                            <th scope="col">f&prime;(x<sub>n</sub>)</th>
+                            <th scope="col">Error</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+
+        result.iterations.forEach(iter => {
+            html += `<tr>
+                <td>${iter.iteration}</td>
+                <td>${iter.x.toFixed(decPlaces)}</td>
+                <td>${iter.fx.toFixed(decPlaces)}</td>
+                <td>${iter.fpx.toFixed(decPlaces)}</td>
+                <td>${iter.error.toExponential(3)}</td>
+            </tr>`;
         });
 
-        /* Close mobile menu when a link is clicked */
-        mobileMenu.querySelectorAll('a').forEach(a => {
-            a.addEventListener('click', () => {
-                mobileMenu.classList.remove('open');
-                hamburger.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', false);
-            });
+        html += '</tbody></table></div>';
+        document.getElementById('results').innerHTML = html;
+
+        const vizEl = document.getElementById('visualization');
+        vizEl.classList.remove('hidden');
+        // Defer draw until layout settles
+        requestAnimationFrame(() => drawConvergenceChart(result.iterations));
+    }
+
+    /* ─────────────────────────────────────────
+       DISPLAY ERROR
+    ───────────────────────────────────────── */
+    function displayError(message) {
+        document.getElementById('results').innerHTML =
+            `<div class="error-message">${message}</div>`;
+        document.getElementById('visualization').classList.add('hidden');
+    }
+
+    /* ─────────────────────────────────────────
+       CONVERGENCE CHART
+    ───────────────────────────────────────── */
+    function drawConvergenceChart(iterations) {
+        const canvas = document.getElementById('convergenceChart');
+        const ctx    = canvas.getContext('2d');
+        const dpr    = Math.min(window.devicePixelRatio || 1, 3);
+
+        // Measure the CSS box
+        const cssW = canvas.parentElement.clientWidth - 2; // 2px fudge
+        const cssH = parseInt(getComputedStyle(canvas).height, 10) || 240;
+
+        canvas.width  = cssW * dpr;
+        canvas.height = cssH * dpr;
+        canvas.style.width  = cssW + 'px';
+        canvas.style.height = cssH + 'px';
+        ctx.scale(dpr, dpr);
+
+        const W   = cssW;
+        const H   = cssH;
+        const pad = { top: 20, right: 20, bottom: 44, left: Math.max(48, W * 0.09) };
+        const plotW = W - pad.left - pad.right;
+        const plotH = H - pad.top  - pad.bottom;
+
+        // Background
+        ctx.fillStyle = 'rgba(12, 16, 32, 0.85)';
+        ctx.fillRect(0, 0, W, H);
+
+        const errors   = iterations.map(i => i.error);
+        const maxError = Math.max(...errors) || 1;
+        const n        = iterations.length;
+
+        const toX = i    => pad.left + (i / Math.max(n - 1, 1)) * plotW;
+        const toY = err  => pad.top  + plotH - (err / maxError) * plotH;
+
+        // Grid lines (subtle)
+        ctx.strokeStyle = 'rgba(50, 130, 184, 0.1)';
+        ctx.lineWidth   = 1;
+        for (let i = 1; i <= 4; i++) {
+            const y = pad.top + (i / 4) * plotH;
+            ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+        }
+
+        // Axes
+        ctx.strokeStyle = 'rgba(50, 130, 184, 0.45)';
+        ctx.lineWidth   = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, pad.top);
+        ctx.lineTo(pad.left, H - pad.bottom);
+        ctx.lineTo(W - pad.right, H - pad.bottom);
+        ctx.stroke();
+
+        // Area fill under line
+        const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
+        grad.addColorStop(0,   'rgba(50, 130, 184, 0.22)');
+        grad.addColorStop(1,   'rgba(50, 130, 184, 0.02)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(toX(0), toY(errors[0]));
+        iterations.forEach((iter, i) => ctx.lineTo(toX(i), toY(iter.error)));
+        ctx.lineTo(toX(n - 1), H - pad.bottom);
+        ctx.lineTo(toX(0), H - pad.bottom);
+        ctx.closePath();
+        ctx.fill();
+
+        // Data line
+        ctx.strokeStyle = '#3282b8';
+        ctx.lineWidth   = 2.5;
+        ctx.lineJoin    = 'round';
+        ctx.beginPath();
+        iterations.forEach((iter, i) => {
+            i === 0 ? ctx.moveTo(toX(i), toY(iter.error))
+                    : ctx.lineTo(toX(i), toY(iter.error));
         });
+        ctx.stroke();
 
-        /* ── Page navigation ── */
-        document.querySelectorAll('[data-page]').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                const page = e.currentTarget.getAttribute('data-page');
-
-                if (page === 'landing') {
-                    document.getElementById('landing-page').style.display = 'flex';
-                    document.querySelector('.features').style.display = 'block';
-                    document.getElementById('calculator-page').classList.remove('active');
-                } else if (page === 'calculator') {
-                    document.getElementById('landing-page').style.display = 'none';
-                    document.querySelector('.features').style.display = 'none';
-                    document.getElementById('calculator-page').classList.add('active');
-                }
-
-                /* Close mobile menu on navigation */
-                mobileMenu.classList.remove('open');
-                hamburger.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', false);
-            });
-        });
-
-        /* ── Expression parser ── */
-        function parseExpression(expr) {
-            expr = expr.replace(/exp/gi, 'EXPFUNC');
-            expr = expr.replace(/\be\b/gi, 'Math.E');
-            expr = expr.replace(/EXPFUNC/g, 'Math.exp');
-            expr = expr.replace(/\^/g, '**');
-            expr = expr.replace(/sin/gi, 'Math.sin');
-            expr = expr.replace(/cos/gi, 'Math.cos');
-            expr = expr.replace(/tan/gi, 'Math.tan');
-            expr = expr.replace(/ln/gi, 'Math.log');
-            expr = expr.replace(/log/gi, 'Math.log10');
-            expr = expr.replace(/sqrt/gi, 'Math.sqrt');
-            expr = expr.replace(/abs/gi, 'Math.abs');
-            expr = expr.replace(/pi/gi, 'Math.PI');
-
-            return x => {
-                try { return eval(expr); }
-                catch (e) { throw new Error('Invalid expression'); }
-            };
-        }
-
-        function numericalDerivative(f, x, h = 0.0001) {
-            return (f(x + h) - f(x - h)) / (2 * h);
-        }
-
-        /* ── Newton-Raphson ── */
-        function newtonRaphson(f, fPrime, x0, tolerance, maxIterations) {
-            let iterations = [];
-            let x = x0;
-
-            for (let i = 0; i < maxIterations; i++) {
-                let fx  = f(x);
-                let fpx = fPrime(x);
-
-                if (Math.abs(fpx) < 1e-10)
-                    throw new Error('Derivative too close to zero. Method fails.');
-
-                let xNew  = x - fx / fpx;
-                let error = Math.abs(xNew - x);
-
-                iterations.push({ iteration: i + 1, x, fx, fpx, xNew, error });
-
-                if (error < tolerance)
-                    return { root: xNew, iterations, converged: true };
-
-                x = xNew;
-            }
-            return { root: x, iterations, converged: false };
-        }
-
-        /* ── Calculate ── */
-        function calculate() {
-            try {
-                const functionStr    = document.getElementById('function').value;
-                const derivativeStr  = document.getElementById('derivative').value;
-                const initial        = parseFloat(document.getElementById('initial').value);
-                const decimalPlaces  = parseInt(document.getElementById('decimalPlaces').value);
-                const maxIterations  = parseInt(document.getElementById('maxIterations').value);
-
-                if (!functionStr || isNaN(initial) || isNaN(decimalPlaces) || isNaN(maxIterations))
-                    throw new Error('Please fill in all required fields with valid values.');
-
-                if (decimalPlaces < 1 || decimalPlaces > 15)
-                    throw new Error('Decimal places must be between 1 and 15.');
-
-                const f = parseExpression(functionStr);
-                const fPrime = derivativeStr.trim()
-                    ? parseExpression(derivativeStr)
-                    : x => numericalDerivative(f, x);
-
-                const tolerance = Math.pow(10, -(decimalPlaces + 2));
-                const result = newtonRaphson(f, fPrime, initial, tolerance, maxIterations);
-                displayResults(result, functionStr, decimalPlaces);
-
-            } catch (error) {
-                displayError(error.message);
-            }
-        }
-
-        /* ── Display results ── */
-        function displayResults(result, functionStr, decimalPlaces) {
-            const resultsDiv = document.getElementById('results');
-            const formattedRoot = result.root.toFixed(decimalPlaces);
-
-            let html = `
-                <div class="result-display">
-                    <div class="result-label">Root (x)</div>
-                    <div class="result-value">${formattedRoot}</div>
-                </div>
-                <div class="result-display">
-                    <div class="result-label">Iterations</div>
-                    <div class="result-value">${result.iterations.length}</div>
-                </div>
-                <div class="result-display">
-                    <div class="result-label">Convergence Status</div>
-                    <div class="result-value" style="color:${result.converged ? 'var(--success)' : 'var(--error)'}">
-                        ${result.converged ? '✓ Converged' : '✗ Max iterations reached'}
-                    </div>
-                </div>
-                <div class="iterations-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>n</th>
-                                <th>x<sub>n</sub></th>
-                                <th>f(x<sub>n</sub>)</th>
-                                <th>f&prime;(x<sub>n</sub>)</th>
-                                <th>Error</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-
-            result.iterations.forEach(iter => {
-                html += `
-                    <tr>
-                        <td>${iter.iteration}</td>
-                        <td>${iter.x.toFixed(decimalPlaces)}</td>
-                        <td>${iter.fx.toFixed(decimalPlaces)}</td>
-                        <td>${iter.fpx.toFixed(decimalPlaces)}</td>
-                        <td>${iter.error.toExponential(3)}</td>
-                    </tr>
-                `;
-            });
-
-            html += `</tbody></table></div>`;
-            resultsDiv.innerHTML = html;
-
-            document.getElementById('visualization').classList.remove('hidden');
-            drawConvergenceChart(result.iterations);
-        }
-
-        function displayError(message) {
-            document.getElementById('results').innerHTML = `
-                <div class="error-message"><strong>Error:</strong> ${message}</div>
-            `;
-            document.getElementById('visualization').classList.add('hidden');
-        }
-
-        /* ── Convergence chart ── */
-        function drawConvergenceChart(iterations) {
-            const canvas = document.getElementById('convergenceChart');
-            const ctx    = canvas.getContext('2d');
-            const dpr    = window.devicePixelRatio || 1;
-
-            const cssW = canvas.parentElement.clientWidth - 40; // account for padding
-            const cssH = parseInt(getComputedStyle(canvas).height) || 300;
-
-            canvas.width  = cssW * dpr;
-            canvas.height = cssH * dpr;
-            canvas.style.width  = cssW + 'px';
-            canvas.style.height = cssH + 'px';
-            ctx.scale(dpr, dpr);
-
-            const W = cssW, H = cssH;
-            const pad = Math.max(45, Math.min(60, W * 0.07));
-
-            ctx.fillStyle = 'rgba(26, 26, 46, 0.8)';
-            ctx.fillRect(0, 0, W, H);
-
-            const errors   = iterations.map(i => i.error);
-            const maxError = Math.max(...errors) || 1;
-            const n        = iterations.length;
-
-            /* Axes */
-            ctx.strokeStyle = 'rgba(50,130,184,0.5)';
-            ctx.lineWidth = 2;
+        // Data points
+        const r = Math.max(3, Math.min(5.5, W / 100));
+        iterations.forEach((iter, i) => {
             ctx.beginPath();
-            ctx.moveTo(pad, pad);
-            ctx.lineTo(pad, H - pad);
-            ctx.lineTo(W - pad, H - pad);
-            ctx.stroke();
-
-            /* Axis labels */
-            const fontSize = Math.max(10, Math.min(14, W / 50));
-            ctx.fillStyle  = '#a0a0a0';
-            ctx.font       = `${fontSize}px JetBrains Mono`;
-            ctx.textAlign  = 'center';
-            ctx.fillText('Iteration', W / 2, H - 6);
-
-            ctx.save();
-            ctx.translate(fontSize, H / 2);
-            ctx.rotate(-Math.PI / 2);
-            ctx.fillText('Error', 0, 0);
-            ctx.restore();
-
-            /* Line */
+            ctx.arc(toX(i), toY(iter.error), r, 0, Math.PI * 2);
+            ctx.fillStyle   = '#bbe1fa';
             ctx.strokeStyle = '#3282b8';
-            ctx.lineWidth   = 2.5;
-            ctx.beginPath();
-            iterations.forEach((iter, i) => {
-                const x = pad + (i / Math.max(n - 1, 1)) * (W - 2 * pad);
-                const y = H - pad - (iter.error / maxError) * (H - 2 * pad);
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
+            ctx.lineWidth   = 1.5;
+            ctx.fill();
             ctx.stroke();
+        });
 
-            /* Points */
-            const r = Math.max(3, Math.min(5, W / 120));
-            ctx.fillStyle = '#bbe1fa';
-            iterations.forEach((iter, i) => {
-                const x = pad + (i / Math.max(n - 1, 1)) * (W - 2 * pad);
-                const y = H - pad - (iter.error / maxError) * (H - 2 * pad);
-                ctx.beginPath();
-                ctx.arc(x, y, r, 0, Math.PI * 2);
-                ctx.fill();
-            });
+        // Font size relative to canvas width
+        const fs = Math.max(9, Math.min(13, W / 55));
+        ctx.fillStyle = '#a0a0a0';
+        ctx.font      = `${fs}px 'JetBrains Mono', monospace`;
 
-            /* X tick labels */
-            ctx.fillStyle = '#a0a0a0';
-            ctx.font = `${fontSize}px JetBrains Mono`;
-            const step = Math.ceil(n / 5);
-            for (let i = 0; i < n; i += step) {
-                const x = pad + (i / Math.max(n - 1, 1)) * (W - 2 * pad);
-                ctx.textAlign = 'center';
-                ctx.fillText(i + 1, x, H - pad + fontSize + 2);
-            }
-
-            /* Y tick labels */
-            ctx.textAlign = 'right';
-            for (let i = 0; i <= 4; i++) {
-                const y     = H - pad - (i / 4) * (H - 2 * pad);
-                const value = (maxError * i / 4).toExponential(1);
-                ctx.fillText(value, pad - 6, y + fontSize / 3);
-            }
+        // X-axis labels
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'top';
+        const step = Math.max(1, Math.ceil(n / Math.min(8, n)));
+        for (let i = 0; i < n; i += step) {
+            ctx.fillText(String(i + 1), toX(i), H - pad.bottom + 8);
         }
 
-        /* Redraw chart on resize */
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                if (!document.getElementById('visualization').classList.contains('hidden')) {
-                    const iterations = window._lastIterations;
-                    if (iterations) drawConvergenceChart(iterations);
-                }
-            }, 200);
+        // X-axis title
+        ctx.fillStyle = '#808080';
+        ctx.font      = `${fs}px 'JetBrains Mono', monospace`;
+        ctx.fillText('Iteration', W / 2, H - fs - 2);
+
+        // Y-axis labels
+        ctx.textAlign    = 'right';
+        ctx.textBaseline = 'middle';
+        for (let i = 0; i <= 4; i++) {
+            const y   = pad.top + (i / 4) * plotH;
+            const val = (maxError * (1 - i / 4)).toExponential(1);
+            ctx.fillText(val, pad.left - 6, y);
+        }
+
+        // Y-axis title
+        ctx.save();
+        ctx.translate(fs + 1, H / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Error', 0, 0);
+        ctx.restore();
+    }
+
+    /* ─────────────────────────────────────────
+       RESIZE — redraw chart
+    ───────────────────────────────────────── */
+    let _resizeRaf = null;
+    window.addEventListener('resize', () => {
+        cancelAnimationFrame(_resizeRaf);
+        _resizeRaf = requestAnimationFrame(() => {
+            const viz = document.getElementById('visualization');
+            if (!viz.classList.contains('hidden') && window._lastIterations) {
+                drawConvergenceChart(window._lastIterations);
+            }
         });
+    });
 
-        /* Store iterations for resize redraw */
-        const _origDisplay = displayResults;
-        window.displayResults = function(result, functionStr, decimalPlaces) {
-            window._lastIterations = result.iterations;
-            _origDisplay(result, functionStr, decimalPlaces);
-        };
-
-        /* Enter key shortcut */
-        document.addEventListener('keypress', e => {
-            if (e.key === 'Enter' && document.getElementById('calculator-page').classList.contains('active'))
+    /* ─────────────────────────────────────────
+       KEYBOARD SHORTCUT — Enter to calculate
+    ───────────────────────────────────────── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey && calculatorPage.classList.contains('active')) {
+            // Only if not inside a textarea
+            if (document.activeElement.tagName !== 'TEXTAREA') {
                 calculate();
-        });
+            }
+        }
+    });
+
+    /* ─────────────────────────────────────────
+       INITIAL STATE
+    ───────────────────────────────────────── */
+    // Nothing to do — landing page is visible by default via CSS
+
     </script>
 </body>
 </html>
