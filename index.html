@@ -16,13 +16,17 @@
             --text-muted: #a0a0a0;
             --success: #4caf50;
             --error: #ef5350;
-            --bg-pattern: #0d0d1a;
+            --nav-height: 70px;
         }
 
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -33,15 +37,12 @@
             overflow-x: hidden;
         }
 
-        /* Geometric Background Pattern */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
                 linear-gradient(45deg, transparent 48%, var(--accent) 48%, var(--accent) 52%, transparent 52%),
                 linear-gradient(-45deg, transparent 48%, var(--accent) 48%, var(--accent) 52%, transparent 52%);
             background-size: 80px 80px;
@@ -51,14 +52,15 @@
             pointer-events: none;
         }
 
-        /* Navigation */
+        /* ─── NAVIGATION ─── */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(26, 26, 46, 0.95);
+            height: var(--nav-height);
+            background: rgba(26, 26, 46, 0.97);
             backdrop-filter: blur(10px);
-            padding: 1.5rem 5%;
+            padding: 0 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -68,29 +70,22 @@
         }
 
         @keyframes slideDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-100%); opacity: 0; }
+            to   { transform: translateY(0);     opacity: 1; }
         }
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
             font-weight: 900;
             color: var(--light);
             letter-spacing: -1px;
+            flex-shrink: 0;
         }
 
-        .logo span {
-            color: var(--highlight);
-            font-style: italic;
-        }
+        .logo span { color: var(--highlight); font-style: italic; }
 
+        /* Desktop nav links */
         .nav-links {
             display: flex;
             gap: 2.5rem;
@@ -101,38 +96,93 @@
             color: var(--text);
             text-decoration: none;
             font-size: 1.1rem;
-            font-weight: 400;
-            transition: color 0.3s ease;
+            transition: color 0.3s;
             position: relative;
         }
 
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
+            bottom: -5px; left: 0;
+            width: 0; height: 2px;
             background: var(--highlight);
-            transition: width 0.3s ease;
+            transition: width 0.3s;
         }
 
-        .nav-links a:hover {
-            color: var(--light);
+        .nav-links a:hover { color: var(--light); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 26px;
+            height: 18px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            z-index: 1100;
         }
 
-        .nav-links a:hover::after {
+        .hamburger span {
+            display: block;
+            height: 2px;
+            background: var(--light);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: var(--nav-height);
+            left: 0;
             width: 100%;
+            background: rgba(22, 33, 62, 0.98);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(50, 130, 184, 0.3);
+            z-index: 999;
+            padding: 1.5rem 5%;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: menuSlide 0.25s ease-out;
         }
 
-        /* Landing Page */
+        .mobile-menu.open { display: flex; }
+
+        @keyframes menuSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-family: 'Playfair Display', serif;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(50, 130, 184, 0.15);
+            transition: color 0.2s;
+        }
+
+        .mobile-menu a:hover { color: var(--light); }
+
+        /* ─── LANDING ─── */
         .landing {
             position: relative;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8rem 5% 4rem;
+            padding: calc(var(--nav-height) + 3rem) 5% 4rem;
         }
 
         .hero {
@@ -144,24 +194,16 @@
             align-items: center;
         }
 
-        .hero-content {
-            animation: fadeInLeft 0.8s ease-out 0.2s both;
-        }
+        .hero-content { animation: fadeInLeft 0.8s ease-out 0.2s both; }
 
         @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-50px); }
+            to   { opacity: 1; transform: translateX(0); }
         }
 
         .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: 5rem;
+            font-size: clamp(2.2rem, 5vw, 5rem);
             font-weight: 900;
             line-height: 1.1;
             margin-bottom: 1.5rem;
@@ -169,23 +211,19 @@
             letter-spacing: -2px;
         }
 
-        .hero-title .highlight {
-            color: var(--highlight);
-            display: block;
-            font-style: italic;
-        }
+        .hero-title .highlight { color: var(--highlight); display: block; font-style: italic; }
 
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: clamp(1rem, 2vw, 1.5rem);
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-weight: 300;
         }
 
         .hero-description {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
             color: var(--text);
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             line-height: 1.8;
         }
 
@@ -193,8 +231,8 @@
             display: inline-block;
             background: linear-gradient(135deg, var(--accent), var(--highlight));
             color: white;
-            padding: 1.2rem 3rem;
-            font-size: 1.2rem;
+            padding: clamp(0.9rem, 2vw, 1.2rem) clamp(1.8rem, 4vw, 3rem);
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
             font-weight: 600;
             border: none;
             border-radius: 50px;
@@ -209,21 +247,12 @@
             box-shadow: 0 15px 40px rgba(50, 130, 184, 0.5);
         }
 
-        /* Formula Display */
-        .hero-visual {
-            position: relative;
-            animation: fadeInRight 0.8s ease-out 0.4s both;
-        }
+        /* Formula card */
+        .hero-visual { animation: fadeInRight 0.8s ease-out 0.4s both; }
 
         @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(50px); }
+            to   { opacity: 1; transform: translateX(0); }
         }
 
         .formula-container {
@@ -231,39 +260,40 @@
             backdrop-filter: blur(20px);
             border: 2px solid rgba(50, 130, 184, 0.3);
             border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: clamp(1.5rem, 4vw, 3rem);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         .formula {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 2.5rem;
+            font-size: clamp(1.1rem, 2.5vw, 2.5rem);
             text-align: center;
             color: var(--light);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             letter-spacing: 2px;
+            overflow-wrap: break-word;
         }
 
         .formula-label {
             text-align: center;
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 1.3vw, 1.1rem);
             font-style: italic;
         }
 
-        /* Features Section */
+        /* ─── FEATURES ─── */
         .features {
-            padding: 6rem 5%;
+            padding: clamp(3rem, 6vw, 6rem) 5%;
             background: var(--secondary);
             position: relative;
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 4vw, 3.5rem);
             font-weight: 900;
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: clamp(2rem, 4vw, 4rem);
             color: var(--light);
         }
 
@@ -271,7 +301,7 @@
             max-width: 1400px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 2rem;
         }
 
@@ -279,7 +309,7 @@
             background: rgba(26, 26, 46, 0.5);
             border: 1px solid rgba(50, 130, 184, 0.2);
             border-radius: 15px;
-            padding: 2.5rem;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
             transition: all 0.3s ease;
             animation: fadeInUp 0.6s ease-out both;
         }
@@ -289,14 +319,8 @@
         .feature-card:nth-child(3) { animation-delay: 0.3s; }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .feature-card:hover {
@@ -305,30 +329,15 @@
             box-shadow: 0 15px 40px rgba(50, 130, 184, 0.2);
         }
 
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
+        .feature-icon { font-size: clamp(2rem, 3vw, 3rem); margin-bottom: 1.2rem; }
+        .feature-title { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2vw, 1.8rem); font-weight: 700; margin-bottom: 1rem; color: var(--light); }
+        .feature-description { font-size: clamp(0.95rem, 1.2vw, 1.1rem); color: var(--text-muted); line-height: 1.7; }
 
-        .feature-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--light);
-        }
-
-        .feature-description {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        /* Calculator Page */
+        /* ─── CALCULATOR PAGE ─── */
         .calculator-page {
             display: none;
             min-height: 100vh;
-            padding: 8rem 5% 4rem;
+            padding: calc(var(--nav-height) + 3rem) 5% 4rem;
         }
 
         .calculator-page.active {
@@ -336,38 +345,26 @@
             animation: fadeIn 0.5s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .calculator-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .calculator-container { max-width: 1200px; margin: 0 auto; }
 
-        .calculator-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
+        .calculator-header { text-align: center; margin-bottom: clamp(2rem, 4vw, 4rem); }
 
         .calculator-title {
             font-family: 'Playfair Display', serif;
-            font-size: 4rem;
+            font-size: clamp(1.8rem, 4vw, 4rem);
             font-weight: 900;
             color: var(--light);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
-        .calculator-subtitle {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-        }
+        .calculator-subtitle { font-size: clamp(1rem, 1.5vw, 1.3rem); color: var(--text-muted); }
 
         .calculator-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: clamp(1.5rem, 3vw, 3rem);
             margin-bottom: 3rem;
         }
 
@@ -376,40 +373,38 @@
             backdrop-filter: blur(20px);
             border: 2px solid rgba(50, 130, 184, 0.3);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: clamp(1.2rem, 3vw, 2.5rem);
         }
 
         .section-heading {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: clamp(1.3rem, 2.5vw, 2rem);
             font-weight: 700;
             color: var(--light);
-            margin-bottom: 2rem;
+            margin-bottom: clamp(1.2rem, 2vw, 2rem);
             border-bottom: 2px solid var(--highlight);
             padding-bottom: 0.5rem;
         }
 
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
+        .input-group { margin-bottom: 1.3rem; }
 
         .input-group label {
             display: block;
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
             color: var(--text);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             font-weight: 500;
         }
 
         .input-group input {
             width: 100%;
-            padding: 1rem;
+            padding: clamp(0.6rem, 1vw, 1rem);
             background: rgba(26, 26, 46, 0.8);
             border: 1px solid rgba(50, 130, 184, 0.3);
             border-radius: 10px;
             color: var(--text);
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
+            font-size: clamp(0.85rem, 1vw, 1rem);
             transition: all 0.3s ease;
         }
 
@@ -421,16 +416,16 @@
 
         .calculate-btn {
             width: 100%;
-            padding: 1.2rem;
+            padding: clamp(0.8rem, 1.5vw, 1.2rem);
             background: linear-gradient(135deg, var(--accent), var(--highlight));
             color: white;
             border: none;
             border-radius: 10px;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 1.2vw, 1.2rem);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 1rem;
+            margin-top: 0.8rem;
         }
 
         .calculate-btn:hover {
@@ -441,40 +436,24 @@
         .result-display {
             background: rgba(26, 26, 46, 0.8);
             border-radius: 10px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
+            padding: clamp(1rem, 2vw, 2rem);
+            margin-bottom: 1.2rem;
             border-left: 4px solid var(--highlight);
         }
 
-        .result-label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .result-label { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 1px; }
+        .result-value { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.2rem, 2vw, 1.8rem); color: var(--light); font-weight: 500; word-break: break-all; }
 
-        .result-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.8rem;
-            color: var(--light);
-            font-weight: 500;
-        }
+        .iterations-table { margin-top: 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
-        .iterations-table {
-            margin-top: 2rem;
-        }
-
-        .iterations-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .iterations-table table { width: 100%; border-collapse: collapse; min-width: 420px; }
 
         .iterations-table th,
         .iterations-table td {
-            padding: 1rem;
+            padding: clamp(0.5rem, 1vw, 1rem);
             text-align: left;
             border-bottom: 1px solid rgba(50, 130, 184, 0.2);
+            white-space: nowrap;
         }
 
         .iterations-table th {
@@ -482,13 +461,13 @@
             color: var(--light);
             font-weight: 600;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+            font-size: clamp(0.75rem, 1vw, 0.9rem);
         }
 
         .iterations-table td {
             font-family: 'JetBrains Mono', monospace;
             color: var(--text);
-            font-size: 0.95rem;
+            font-size: clamp(0.8rem, 1vw, 0.95rem);
         }
 
         .error-message {
@@ -501,598 +480,98 @@
         }
 
         .visualization {
-            margin-top: 3rem;
+            margin-top: 2rem;
             background: rgba(22, 33, 62, 0.6);
             backdrop-filter: blur(20px);
             border: 2px solid rgba(50, 130, 184, 0.3);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: clamp(1.2rem, 3vw, 2.5rem);
         }
 
         canvas {
-            width: 100%;
-            height: 400px;
+            width: 100% !important;
+            height: clamp(200px, 40vw, 400px);
             border-radius: 10px;
+            display: block;
         }
 
-        /* Responsive */
+        .hidden { display: none !important; }
+
+        /* ─── RESPONSIVE BREAKPOINTS ─── */
+
+        /* Tablet landscape & small desktop */
         @media (max-width: 1024px) {
-            :root {
-                font-size: 15px;
-            }
-            
-            nav {
-                padding: 1rem 3%;
-            }
-
-            .landing {
-                padding: 7rem 3% 3rem;
-            }
-
-            .features {
-                padding: 4rem 3%;
-            }
-
-            .calculator-page {
-                padding: 7rem 3% 3rem;
-            }
+            nav { padding: 0 4%; }
+            .landing { padding: calc(var(--nav-height) + 2.5rem) 4% 3rem; }
+            .features { padding: clamp(2.5rem, 5vw, 5rem) 4%; }
+            .calculator-page { padding: calc(var(--nav-height) + 2.5rem) 4% 3rem; }
         }
 
-        @media (max-width: 968px) {
-            .hero {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
+        /* Tablet portrait */
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; gap: 2.5rem; }
+            .hero-content { order: 1; }
+            .hero-visual  { order: 2; }
 
-            .hero-title {
-                font-size: 3.5rem;
-            }
-
-            .hero-visual {
-                margin-top: 1rem;
-            }
-
-            .calculator-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .nav-links {
-                gap: 1.5rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
-
-            .formula {
-                font-size: 1.8rem;
-            }
+            .calculator-grid { grid-template-columns: 1fr; }
         }
 
-        @media (max-width: 768px) {
-            :root {
-                font-size: 14px;
-            }
-
-            nav {
-                padding: 1rem 2%;
-                gap: 0.5rem;
-            }
-
-            .logo {
-                font-size: 1.4rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-                flex-wrap: wrap;
-            }
-
-            .nav-links a {
-                font-size: 1rem;
-            }
-
-            .landing {
-                padding: 6rem 2% 2rem;
-                min-height: auto;
-            }
-
-            .hero-title {
-                font-size: 2.5rem;
-                margin-bottom: 1rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.2rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .hero-description {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .formula-container {
-                padding: 2rem;
-            }
-
-            .formula {
-                font-size: 1.5rem;
-            }
-
-            .features {
-                padding: 3rem 2%;
-            }
-
-            .section-title {
-                font-size: 2rem;
-                margin-bottom: 2.5rem;
-            }
-
-            .features-grid {
-                gap: 1.5rem;
-            }
-
-            .feature-card {
-                padding: 1.5rem;
-            }
-
-            .feature-icon {
-                font-size: 2.5rem;
-                margin-bottom: 1rem;
-            }
-
-            .feature-title {
-                font-size: 1.5rem;
-            }
-
-            .feature-description {
-                font-size: 1rem;
-            }
-
-            .calculator-page {
-                padding: 6rem 2% 2rem;
-            }
-
-            .calculator-title {
-                font-size: 2rem;
-            }
-
-            .calculator-subtitle {
-                font-size: 1.1rem;
-            }
-
-            .input-section, .output-section {
-                padding: 1.5rem;
-            }
-
-            .section-heading {
-                font-size: 1.5rem;
-            }
-
-            .input-group label {
-                font-size: 1rem;
-            }
-
-            .input-group input {
-                padding: 0.8rem;
-                font-size: 0.95rem;
-            }
-
-            .calculate-btn {
-                padding: 1rem;
-                font-size: 1rem;
-            }
-
-            .result-display {
-                padding: 1.5rem;
-            }
-
-            .result-value {
-                font-size: 1.5rem;
-            }
-
-            .iterations-table th,
-            .iterations-table td {
-                padding: 0.75rem;
-                font-size: 0.85rem;
-            }
-
-            .visualization {
-                padding: 1.5rem;
-            }
-
-            canvas {
-                height: 300px;
-            }
-
-            .cta-button {
-                padding: 1rem 2rem;
-                font-size: 1rem;
-            }
-        }
-
+        /* Mobile – show hamburger, hide desktop nav */
         @media (max-width: 640px) {
-            :root {
-                font-size: 13px;
-            }
+            :root { --nav-height: 60px; }
 
-            nav {
-                flex-direction: column;
-                gap: 0.5rem;
-                padding: 0.8rem 2%;
-                position: relative;
-                min-height: auto;
-            }
+            nav { padding: 0 4%; }
 
-            .logo {
-                font-size: 1.2rem;
-                width: 100%;
-                text-align: center;
-            }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
 
-            .nav-links {
-                gap: 0.8rem;
-                justify-content: center;
-                width: 100%;
-            }
+            .landing { padding: calc(var(--nav-height) + 2rem) 4% 2rem; min-height: auto; }
+            .features { padding: 2.5rem 4%; }
+            .calculator-page { padding: calc(var(--nav-height) + 2rem) 4% 2rem; }
 
-            .nav-links a {
-                font-size: 0.95rem;
-            }
+            .hero { gap: 2rem; }
 
-            .landing {
-                padding: 5rem 2% 1.5rem;
-                min-height: auto;
-            }
+            .hero-title { letter-spacing: -1px; }
 
-            .hero {
-                gap: 1.5rem;
-            }
+            .cta-button { width: 100%; text-align: center; }
 
-            .hero-title {
-                font-size: 2rem;
-                margin-bottom: 0.8rem;
-                line-height: 1.2;
-            }
+            .features-grid { grid-template-columns: 1fr; }
 
-            .hero-subtitle {
-                font-size: 1rem;
-                margin-bottom: 1rem;
-            }
-
-            .hero-description {
-                font-size: 0.95rem;
-                margin-bottom: 1.5rem;
-                line-height: 1.6;
-            }
-
-            .cta-button {
-                padding: 0.9rem 1.8rem;
-                font-size: 0.95rem;
-                width: 100%;
-                text-align: center;
-            }
-
-            .formula-container {
-                padding: 1.5rem;
-            }
-
-            .formula {
-                font-size: 1.3rem;
-                margin-bottom: 1rem;
-            }
-
-            .formula-label {
-                font-size: 0.9rem;
-            }
-
-            .features {
-                padding: 2rem 2%;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-                margin-bottom: 2rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-
-            .feature-card {
-                padding: 1.2rem;
-            }
-
-            .feature-icon {
-                font-size: 2rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .feature-title {
-                font-size: 1.3rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .feature-description {
-                font-size: 0.9rem;
-            }
-
-            .calculator-page {
-                padding: 5rem 2% 1.5rem;
-            }
-
-            .calculator-container {
-                max-width: 100%;
-            }
-
-            .calculator-header {
-                margin-bottom: 2rem;
-            }
-
-            .calculator-title {
-                font-size: 1.8rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .calculator-subtitle {
-                font-size: 1rem;
-            }
-
-            .calculator-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                margin-bottom: 2rem;
-            }
-
-            .input-section, .output-section {
-                padding: 1.2rem;
-                border-radius: 15px;
-            }
-
-            .section-heading {
-                font-size: 1.3rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .input-group {
-                margin-bottom: 1.2rem;
-            }
-
-            .input-group label {
-                font-size: 0.95rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .input-group input {
-                padding: 0.7rem;
-                font-size: 0.9rem;
-                border-radius: 8px;
-            }
-
-            .calculate-btn {
-                width: 100%;
-                padding: 0.9rem;
-                font-size: 0.95rem;
-                margin-top: 0.8rem;
-                border-radius: 8px;
-            }
-
-            .result-display {
-                padding: 1.2rem;
-                margin-bottom: 1.2rem;
-                border-radius: 10px;
-            }
-
-            .result-label {
-                font-size: 0.8rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .result-value {
-                font-size: 1.3rem;
-            }
-
-            .iterations-table {
-                margin-top: 1.5rem;
-                overflow-x: auto;
-            }
-
-            .iterations-table table {
-                font-size: 0.8rem;
-                min-width: 100%;
-            }
-
-            .iterations-table th,
-            .iterations-table td {
-                padding: 0.6rem 0.4rem;
-                font-size: 0.8rem;
-            }
-
-            .visualization {
-                margin-top: 2rem;
-                padding: 1.2rem;
-            }
-
-            canvas {
-                height: 250px;
-                width: 100%;
-            }
-
-            .error-message {
-                padding: 1.2rem;
-                font-size: 0.95rem;
-            }
+            .calculator-grid { grid-template-columns: 1fr; gap: 1.5rem; }
         }
 
-        @media (max-width: 480px) {
-            :root {
-                font-size: 12px;
-            }
-
-            nav {
-                padding: 0.7rem 1.5%;
-            }
-
-            .logo {
-                font-size: 1.1rem;
-            }
-
-            .nav-links {
-                gap: 0.6rem;
-            }
-
-            .nav-links a {
-                font-size: 0.9rem;
-            }
-
-            .landing {
-                padding: 4.5rem 1.5% 1rem;
-                min-height: 100vh;
-            }
-
-            .hero {
-                gap: 1rem;
-            }
-
-            .hero-title {
-                font-size: 1.8rem;
-                margin-bottom: 0.6rem;
-            }
-
-            .hero-subtitle {
-                font-size: 0.9rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .hero-description {
-                font-size: 0.9rem;
-                margin-bottom: 1.2rem;
-            }
-
-            .cta-button {
-                padding: 0.8rem 1.5rem;
-                font-size: 0.9rem;
-            }
-
-            .formula-container {
-                padding: 1.2rem;
-                border-radius: 15px;
-            }
-
-            .formula {
-                font-size: 1.1rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .features {
-                padding: 1.5rem 1.5%;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .feature-card {
-                padding: 1rem;
-            }
-
-            .feature-icon {
-                font-size: 1.8rem;
-                margin-bottom: 0.6rem;
-            }
-
-            .feature-title {
-                font-size: 1.2rem;
-            }
-
-            .feature-description {
-                font-size: 0.85rem;
-            }
-
-            .calculator-page {
-                padding: 4.5rem 1.5% 1rem;
-            }
-
-            .calculator-title {
-                font-size: 1.6rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .calculator-subtitle {
-                font-size: 0.95rem;
-            }
-
-            .input-section, .output-section {
-                padding: 1rem;
-                border-radius: 12px;
-            }
-
-            .section-heading {
-                font-size: 1.2rem;
-                margin-bottom: 1.2rem;
-                padding-bottom: 0.4rem;
-            }
-
-            .input-group {
-                margin-bottom: 1rem;
-            }
-
-            .input-group label {
-                font-size: 0.9rem;
-                margin-bottom: 0.3rem;
-            }
-
-            .input-group input {
-                padding: 0.6rem;
-                font-size: 0.85rem;
-                border-radius: 6px;
-            }
-
-            .calculate-btn {
-                padding: 0.8rem;
-                font-size: 0.9rem;
-                margin-top: 0.6rem;
-            }
-
-            .result-value {
-                font-size: 1.2rem;
-            }
-
-            .iterations-table th,
-            .iterations-table td {
-                padding: 0.5rem 0.3rem;
-                font-size: 0.75rem;
-            }
-
-            canvas {
-                height: 200px;
-            }
-
-            .visualization {
-                margin-top: 1.5rem;
-                padding: 1rem;
-            }
-        }
-
-        /* Utility Classes */
-        .hidden {
-            display: none !important;
+        /* Small phones */
+        @media (max-width: 400px) {
+            nav { padding: 0 3%; }
+            .landing { padding: calc(var(--nav-height) + 1.5rem) 3% 1.5rem; }
+            .features { padding: 2rem 3%; }
+            .calculator-page { padding: calc(var(--nav-height) + 1.5rem) 3% 1.5rem; }
         }
     </style>
 </head>
 <body>
+
     <!-- Navigation -->
     <nav>
         <div class="logo">Newton<span>Raphson</span></div>
+
+        <!-- Desktop nav -->
         <ul class="nav-links">
             <li><a href="#" data-page="landing">Home</a></li>
             <li><a href="#" data-page="calculator">Calculator</a></li>
         </ul>
+
+        <!-- Hamburger button (mobile) -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+        <a href="#" data-page="landing">Home</a>
+        <a href="#" data-page="calculator">Calculator</a>
+    </div>
 
     <!-- Landing Page -->
     <section class="landing" id="landing-page">
@@ -1104,8 +583,8 @@
                 </h1>
                 <p class="hero-subtitle">Advanced numerical root-finding algorithm</p>
                 <p class="hero-description">
-                    The Newton-Raphson method is a powerful iterative technique for finding successively 
-                    better approximations to the roots of a real-valued function. Experience fast convergence 
+                    The Newton-Raphson method is a powerful iterative technique for finding successively
+                    better approximations to the roots of a real-valued function. Experience fast convergence
                     and mathematical elegance in solving complex equations.
                 </p>
                 <a href="#" class="cta-button" data-page="calculator">Start Computing</a>
@@ -1113,7 +592,7 @@
             <div class="hero-visual">
                 <div class="formula-container">
                     <div class="formula">
-                        x<sub>n+1</sub> = x<sub>n</sub> - f(x<sub>n</sub>)/f'(x<sub>n</sub>)
+                        x<sub>n+1</sub> = x<sub>n</sub> &minus; f(x<sub>n</sub>)/f&prime;(x<sub>n</sub>)
                     </div>
                     <p class="formula-label">The iterative formula for convergence</p>
                 </div>
@@ -1123,13 +602,13 @@
 
     <!-- Features Section -->
     <section class="features">
-        <h2 class="section-title">Why Newton-Raphson???</h2>
+        <h2 class="section-title">Why Newton-Raphson?</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">⚡</div>
                 <h3 class="feature-title">Rapid Convergence</h3>
                 <p class="feature-description">
-                    Achieves quadratic convergence near the root, making it one of the fastest 
+                    Achieves quadratic convergence near the root, making it one of the fastest
                     root-finding algorithms available for smooth functions.
                 </p>
             </div>
@@ -1137,7 +616,7 @@
                 <div class="feature-icon">🎯</div>
                 <h3 class="feature-title">High Precision</h3>
                 <p class="feature-description">
-                    Delivers accurate results with minimal iterations, perfect for applications 
+                    Delivers accurate results with minimal iterations, perfect for applications
                     requiring exact solutions in engineering and scientific computing.
                 </p>
             </div>
@@ -1145,7 +624,7 @@
                 <div class="feature-icon">📊</div>
                 <h3 class="feature-title">Iterative Insight</h3>
                 <p class="feature-description">
-                    Track the convergence process step-by-step with detailed iteration tables 
+                    Track the convergence process step-by-step with detailed iteration tables
                     and visualizations for better understanding.
                 </p>
             </div>
@@ -1163,14 +642,14 @@
             <div class="calculator-grid">
                 <div class="input-section">
                     <h2 class="section-heading">Input Parameters</h2>
-                    
+
                     <div class="input-group">
                         <label for="function">Function f(x)</label>
                         <input type="text" id="function" placeholder="e.g., e^x - 3*x or x^3 - 2*x - 5" value="x^3 - 2*x - 5">
                     </div>
 
                     <div class="input-group">
-                        <label for="derivative">Derivative f'(x) (optional - will compute if empty)</label>
+                        <label for="derivative">Derivative f'(x) (optional)</label>
                         <input type="text" id="derivative" placeholder="e.g., 3*x^2 - 2">
                     </div>
 
@@ -1194,9 +673,8 @@
 
                 <div class="output-section">
                     <h2 class="section-heading">Results</h2>
-                    
                     <div id="results">
-                        <p style="color: var(--text-muted); text-align: center; padding: 3rem;">
+                        <p style="color: var(--text-muted); text-align: center; padding: 3rem 1rem;">
                             Enter your parameters and click "Calculate Root" to see the results.
                         </p>
                     </div>
@@ -1211,12 +689,31 @@
     </section>
 
     <script>
-        // Page Navigation
+        /* ── Hamburger / mobile menu ── */
+        const hamburger   = document.getElementById('hamburger');
+        const mobileMenu  = document.getElementById('mobile-menu');
+
+        hamburger.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            hamburger.classList.toggle('open', isOpen);
+            hamburger.setAttribute('aria-expanded', isOpen);
+        });
+
+        /* Close mobile menu when a link is clicked */
+        mobileMenu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', false);
+            });
+        });
+
+        /* ── Page navigation ── */
         document.querySelectorAll('[data-page]').forEach(link => {
-            link.addEventListener('click', (e) => {
+            link.addEventListener('click', e => {
                 e.preventDefault();
-                const page = e.target.getAttribute('data-page');
-                
+                const page = e.currentTarget.getAttribute('data-page');
+
                 if (page === 'landing') {
                     document.getElementById('landing-page').style.display = 'flex';
                     document.querySelector('.features').style.display = 'block';
@@ -1226,25 +723,19 @@
                     document.querySelector('.features').style.display = 'none';
                     document.getElementById('calculator-page').classList.add('active');
                 }
+
+                /* Close mobile menu on navigation */
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', false);
             });
         });
 
-        // Mathematical Expression Parser
+        /* ── Expression parser ── */
         function parseExpression(expr) {
-            // First, protect 'exp' function from being affected by 'e' replacement
             expr = expr.replace(/exp/gi, 'EXPFUNC');
-            
-            // Replace standalone 'e' with Math.E (Euler's number)
-            // This regex matches 'e' that is:
-            // - at the start of string or after an operator/parenthesis
-            // - followed by an operator, parenthesis, or end of string
-            // - but not part of 'exp' (already protected as EXPFUNC)
             expr = expr.replace(/\be\b/gi, 'Math.E');
-            
-            // Restore 'exp' function
             expr = expr.replace(/EXPFUNC/g, 'Math.exp');
-            
-            // Replace other common mathematical notation
             expr = expr.replace(/\^/g, '**');
             expr = expr.replace(/sin/gi, 'Math.sin');
             expr = expr.replace(/cos/gi, 'Math.cos');
@@ -1254,118 +745,91 @@
             expr = expr.replace(/sqrt/gi, 'Math.sqrt');
             expr = expr.replace(/abs/gi, 'Math.abs');
             expr = expr.replace(/pi/gi, 'Math.PI');
-            
-            return (x) => {
-                try {
-                    return eval(expr);
-                } catch (e) {
-                    throw new Error('Invalid expression');
-                }
+
+            return x => {
+                try { return eval(expr); }
+                catch (e) { throw new Error('Invalid expression'); }
             };
         }
 
-        // Numerical derivative
         function numericalDerivative(f, x, h = 0.0001) {
             return (f(x + h) - f(x - h)) / (2 * h);
         }
 
-        // Newton-Raphson Method
+        /* ── Newton-Raphson ── */
         function newtonRaphson(f, fPrime, x0, tolerance, maxIterations) {
             let iterations = [];
             let x = x0;
-            
+
             for (let i = 0; i < maxIterations; i++) {
-                let fx = f(x);
+                let fx  = f(x);
                 let fpx = fPrime(x);
-                
-                if (Math.abs(fpx) < 1e-10) {
+
+                if (Math.abs(fpx) < 1e-10)
                     throw new Error('Derivative too close to zero. Method fails.');
-                }
-                
-                let xNew = x - fx / fpx;
+
+                let xNew  = x - fx / fpx;
                 let error = Math.abs(xNew - x);
-                
-                iterations.push({
-                    iteration: i + 1,
-                    x: x,
-                    fx: fx,
-                    fpx: fpx,
-                    xNew: xNew,
-                    error: error
-                });
-                
-                if (error < tolerance) {
-                    return { root: xNew, iterations: iterations, converged: true };
-                }
-                
+
+                iterations.push({ iteration: i + 1, x, fx, fpx, xNew, error });
+
+                if (error < tolerance)
+                    return { root: xNew, iterations, converged: true };
+
                 x = xNew;
             }
-            
-            return { root: x, iterations: iterations, converged: false };
+            return { root: x, iterations, converged: false };
         }
 
-        // Calculate function
+        /* ── Calculate ── */
         function calculate() {
             try {
-                const functionStr = document.getElementById('function').value;
-                const derivativeStr = document.getElementById('derivative').value;
-                const initial = parseFloat(document.getElementById('initial').value);
-                const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value);
-                const maxIterations = parseInt(document.getElementById('maxIterations').value);
-                
-                if (!functionStr || isNaN(initial) || isNaN(decimalPlaces) || isNaN(maxIterations)) {
+                const functionStr    = document.getElementById('function').value;
+                const derivativeStr  = document.getElementById('derivative').value;
+                const initial        = parseFloat(document.getElementById('initial').value);
+                const decimalPlaces  = parseInt(document.getElementById('decimalPlaces').value);
+                const maxIterations  = parseInt(document.getElementById('maxIterations').value);
+
+                if (!functionStr || isNaN(initial) || isNaN(decimalPlaces) || isNaN(maxIterations))
                     throw new Error('Please fill in all required fields with valid values.');
-                }
-                
-                if (decimalPlaces < 1 || decimalPlaces > 15) {
+
+                if (decimalPlaces < 1 || decimalPlaces > 15)
                     throw new Error('Decimal places must be between 1 and 15.');
-                }
-                
+
                 const f = parseExpression(functionStr);
-                let fPrime;
-                
-                if (derivativeStr.trim()) {
-                    fPrime = parseExpression(derivativeStr);
-                } else {
-                    fPrime = (x) => numericalDerivative(f, x);
-                }
-                
-                // Calculate tolerance based on decimal places
+                const fPrime = derivativeStr.trim()
+                    ? parseExpression(derivativeStr)
+                    : x => numericalDerivative(f, x);
+
                 const tolerance = Math.pow(10, -(decimalPlaces + 2));
-                
                 const result = newtonRaphson(f, fPrime, initial, tolerance, maxIterations);
                 displayResults(result, functionStr, decimalPlaces);
-                
+
             } catch (error) {
                 displayError(error.message);
             }
         }
 
-        // Display results
+        /* ── Display results ── */
         function displayResults(result, functionStr, decimalPlaces) {
             const resultsDiv = document.getElementById('results');
-            
-            // Format root to specified decimal places
             const formattedRoot = result.root.toFixed(decimalPlaces);
-            
+
             let html = `
                 <div class="result-display">
                     <div class="result-label">Root (x)</div>
                     <div class="result-value">${formattedRoot}</div>
                 </div>
-                
                 <div class="result-display">
                     <div class="result-label">Iterations</div>
                     <div class="result-value">${result.iterations.length}</div>
                 </div>
-                
                 <div class="result-display">
                     <div class="result-label">Convergence Status</div>
-                    <div class="result-value" style="color: ${result.converged ? 'var(--success)' : 'var(--error)'}">
+                    <div class="result-value" style="color:${result.converged ? 'var(--success)' : 'var(--error)'}">
                         ${result.converged ? '✓ Converged' : '✗ Max iterations reached'}
                     </div>
                 </div>
-                
                 <div class="iterations-table">
                     <table>
                         <thead>
@@ -1373,13 +837,13 @@
                                 <th>n</th>
                                 <th>x<sub>n</sub></th>
                                 <th>f(x<sub>n</sub>)</th>
-                                <th>f'(x<sub>n</sub>)</th>
+                                <th>f&prime;(x<sub>n</sub>)</th>
                                 <th>Error</th>
                             </tr>
                         </thead>
                         <tbody>
             `;
-            
+
             result.iterations.forEach(iter => {
                 html += `
                     <tr>
@@ -1391,128 +855,133 @@
                     </tr>
                 `;
             });
-            
-            html += `
-                        </tbody>
-                    </table>
-                </div>
-            `;
-            
+
+            html += `</tbody></table></div>`;
             resultsDiv.innerHTML = html;
-            
-            // Show visualization
+
             document.getElementById('visualization').classList.remove('hidden');
             drawConvergenceChart(result.iterations);
         }
 
-        // Display error
         function displayError(message) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = `
-                <div class="error-message">
-                    <strong>Error:</strong> ${message}
-                </div>
+            document.getElementById('results').innerHTML = `
+                <div class="error-message"><strong>Error:</strong> ${message}</div>
             `;
             document.getElementById('visualization').classList.add('hidden');
         }
 
-        // Draw convergence chart
+        /* ── Convergence chart ── */
         function drawConvergenceChart(iterations) {
             const canvas = document.getElementById('convergenceChart');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size
-            canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-            canvas.height = 400 * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            
-            const width = canvas.offsetWidth;
-            const height = 400;
-            const padding = 60;
-            
-            // Clear canvas
+            const ctx    = canvas.getContext('2d');
+            const dpr    = window.devicePixelRatio || 1;
+
+            const cssW = canvas.parentElement.clientWidth - 40; // account for padding
+            const cssH = parseInt(getComputedStyle(canvas).height) || 300;
+
+            canvas.width  = cssW * dpr;
+            canvas.height = cssH * dpr;
+            canvas.style.width  = cssW + 'px';
+            canvas.style.height = cssH + 'px';
+            ctx.scale(dpr, dpr);
+
+            const W = cssW, H = cssH;
+            const pad = Math.max(45, Math.min(60, W * 0.07));
+
             ctx.fillStyle = 'rgba(26, 26, 46, 0.8)';
-            ctx.fillRect(0, 0, width, height);
-            
-            // Get data
-            const errors = iterations.map(iter => iter.error);
-            const maxError = Math.max(...errors);
-            
-            // Draw axes
-            ctx.strokeStyle = 'rgba(50, 130, 184, 0.5)';
+            ctx.fillRect(0, 0, W, H);
+
+            const errors   = iterations.map(i => i.error);
+            const maxError = Math.max(...errors) || 1;
+            const n        = iterations.length;
+
+            /* Axes */
+            ctx.strokeStyle = 'rgba(50,130,184,0.5)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(padding, padding);
-            ctx.lineTo(padding, height - padding);
-            ctx.lineTo(width - padding, height - padding);
+            ctx.moveTo(pad, pad);
+            ctx.lineTo(pad, H - pad);
+            ctx.lineTo(W - pad, H - pad);
             ctx.stroke();
-            
-            // Draw labels
-            ctx.fillStyle = '#a0a0a0';
-            ctx.font = '14px JetBrains Mono';
-            ctx.textAlign = 'center';
-            ctx.fillText('Iteration', width / 2, height - 20);
-            
+
+            /* Axis labels */
+            const fontSize = Math.max(10, Math.min(14, W / 50));
+            ctx.fillStyle  = '#a0a0a0';
+            ctx.font       = `${fontSize}px JetBrains Mono`;
+            ctx.textAlign  = 'center';
+            ctx.fillText('Iteration', W / 2, H - 6);
+
             ctx.save();
-            ctx.translate(20, height / 2);
+            ctx.translate(fontSize, H / 2);
             ctx.rotate(-Math.PI / 2);
             ctx.fillText('Error', 0, 0);
             ctx.restore();
-            
-            // Draw data line
+
+            /* Line */
             ctx.strokeStyle = '#3282b8';
-            ctx.lineWidth = 3;
+            ctx.lineWidth   = 2.5;
             ctx.beginPath();
-            
             iterations.forEach((iter, i) => {
-                const x = padding + (i / (iterations.length - 1)) * (width - 2 * padding);
-                const y = height - padding - (iter.error / maxError) * (height - 2 * padding);
-                
-                if (i === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
+                const x = pad + (i / Math.max(n - 1, 1)) * (W - 2 * pad);
+                const y = H - pad - (iter.error / maxError) * (H - 2 * pad);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
             });
-            
             ctx.stroke();
-            
-            // Draw points
+
+            /* Points */
+            const r = Math.max(3, Math.min(5, W / 120));
             ctx.fillStyle = '#bbe1fa';
             iterations.forEach((iter, i) => {
-                const x = padding + (i / (iterations.length - 1)) * (width - 2 * padding);
-                const y = height - padding - (iter.error / maxError) * (height - 2 * padding);
-                
+                const x = pad + (i / Math.max(n - 1, 1)) * (W - 2 * pad);
+                const y = H - pad - (iter.error / maxError) * (H - 2 * pad);
                 ctx.beginPath();
-                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.arc(x, y, r, 0, Math.PI * 2);
                 ctx.fill();
             });
-            
-            // Draw axis labels
+
+            /* X tick labels */
             ctx.fillStyle = '#a0a0a0';
-            ctx.font = '12px JetBrains Mono';
-            for (let i = 0; i < iterations.length; i += Math.ceil(iterations.length / 5)) {
-                const x = padding + (i / (iterations.length - 1)) * (width - 2 * padding);
+            ctx.font = `${fontSize}px JetBrains Mono`;
+            const step = Math.ceil(n / 5);
+            for (let i = 0; i < n; i += step) {
+                const x = pad + (i / Math.max(n - 1, 1)) * (W - 2 * pad);
                 ctx.textAlign = 'center';
-                ctx.fillText(i + 1, x, height - padding + 20);
+                ctx.fillText(i + 1, x, H - pad + fontSize + 2);
             }
-            
+
+            /* Y tick labels */
             ctx.textAlign = 'right';
             for (let i = 0; i <= 4; i++) {
-                const y = height - padding - (i / 4) * (height - 2 * padding);
-                const value = (maxError * i / 4).toExponential(2);
-                ctx.fillText(value, padding - 10, y + 5);
+                const y     = H - pad - (i / 4) * (H - 2 * pad);
+                const value = (maxError * i / 4).toExponential(1);
+                ctx.fillText(value, pad - 6, y + fontSize / 3);
             }
         }
 
-        // Allow Enter key to calculate
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && document.getElementById('calculator-page').classList.contains('active')) {
+        /* Redraw chart on resize */
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (!document.getElementById('visualization').classList.contains('hidden')) {
+                    const iterations = window._lastIterations;
+                    if (iterations) drawConvergenceChart(iterations);
+                }
+            }, 200);
+        });
+
+        /* Store iterations for resize redraw */
+        const _origDisplay = displayResults;
+        window.displayResults = function(result, functionStr, decimalPlaces) {
+            window._lastIterations = result.iterations;
+            _origDisplay(result, functionStr, decimalPlaces);
+        };
+
+        /* Enter key shortcut */
+        document.addEventListener('keypress', e => {
+            if (e.key === 'Enter' && document.getElementById('calculator-page').classList.contains('active'))
                 calculate();
-            }
         });
     </script>
 </body>
-
 </html>
-//End of code.....
