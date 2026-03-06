@@ -34,7 +34,6 @@
             --radius-lg:     20px;
             --radius-xl:     28px;
 
-            /* Fluid type scale — no JS, no breakpoint jumps */
             --step--1: clamp(0.78rem,  0.72rem + 0.28vw,  0.94rem);
             --step-0:  clamp(0.9rem,   0.82rem + 0.4vw,   1.1rem);
             --step-1:  clamp(1rem,     0.9rem  + 0.5vw,   1.25rem);
@@ -43,7 +42,6 @@
             --step-4:  clamp(1.9rem,   1.2rem  + 3.5vw,   4rem);
             --step-5:  clamp(2.2rem,   1.3rem  + 4.5vw,   5rem);
 
-            /* Fluid space scale */
             --space-xs:   clamp(0.4rem,  0.3rem + 0.5vw,  0.75rem);
             --space-sm:   clamp(0.75rem, 0.6rem + 0.75vw, 1.25rem);
             --space-md:   clamp(1rem,    0.8rem + 1vw,    1.75rem);
@@ -52,20 +50,9 @@
             --space-2xl:  clamp(3rem,    2rem   + 5vw,    6rem);
         }
 
-        /* ═══════════════════════════════════════
-           RESET & BASE
-        ═══════════════════════════════════════ */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
-        }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
         body {
             font-family: 'Crimson Pro', Georgia, serif;
@@ -76,7 +63,6 @@
             min-width: 320px;
         }
 
-        /* Geometric grid overlay */
         body::before {
             content: '';
             position: fixed;
@@ -128,17 +114,9 @@
             flex-shrink: 0;
             line-height: 1;
         }
-        .logo em {
-            color: var(--highlight);
-            font-style: italic;
-        }
+        .logo em { color: var(--highlight); font-style: italic; }
 
-        /* ── Desktop nav links ── */
-        .nav-links {
-            display: flex;
-            gap: clamp(1.5rem, 3vw, 2.5rem);
-            list-style: none;
-        }
+        .nav-links { display: flex; gap: clamp(1.5rem, 3vw, 2.5rem); list-style: none; }
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
@@ -158,18 +136,15 @@
             border-radius: 2px;
             transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .nav-links a:hover,
-        .nav-links a:focus { color: var(--light); outline: none; }
+        .nav-links a:hover, .nav-links a:focus { color: var(--light); outline: none; }
         .nav-links a:hover::after { width: 100%; }
 
-        /* ── Hamburger ── */
         .hamburger {
             display: none;
             flex-direction: column;
             justify-content: center;
             gap: 5px;
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             padding: 6px;
             cursor: pointer;
             background: none;
@@ -177,28 +152,25 @@
             border-radius: var(--radius-sm);
             transition: background 0.2s;
         }
-        .hamburger:hover,
-        .hamburger:focus { background: rgba(50, 130, 184, 0.12); outline: none; }
+        .hamburger:hover, .hamburger:focus { background: rgba(50,130,184,0.12); outline: none; }
         .hamburger span {
             display: block;
             height: 2px;
             background: var(--light);
             border-radius: 2px;
-            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
+            transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.3s;
             transform-origin: center;
         }
         .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
         .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* ── Mobile slide-down menu ── */
         .mobile-menu {
             display: none;
             position: fixed;
-            top: var(--nav-h);
-            left: 0;
+            top: var(--nav-h); left: 0;
             width: 100%;
-            background: rgba(12, 16, 32, 0.98);
+            background: rgba(12,16,32,0.98);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
@@ -207,10 +179,7 @@
             flex-direction: column;
             gap: 0;
         }
-        .mobile-menu.open {
-            display: flex;
-            animation: menuSlide 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
-        }
+        .mobile-menu.open { display: flex; animation: menuSlide 0.22s cubic-bezier(0.22,1,0.36,1) both; }
         @keyframes menuSlide {
             from { opacity: 0; transform: translateY(-8px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -221,7 +190,7 @@
             font-size: var(--step-2);
             font-family: 'Playfair Display', serif;
             padding: var(--space-sm) 0;
-            border-bottom: 1px solid rgba(50, 130, 184, 0.1);
+            border-bottom: 1px solid rgba(50,130,184,0.1);
             transition: color 0.2s, padding-left 0.2s;
             display: block;
         }
@@ -229,7 +198,7 @@
         .mobile-menu a:hover { color: var(--light); padding-left: 6px; }
 
         /* ═══════════════════════════════════════
-           LANDING PAGE
+           LANDING
         ═══════════════════════════════════════ */
         .landing {
             position: relative;
@@ -249,9 +218,7 @@
             align-items: center;
         }
 
-        .hero-content {
-            animation: fadeInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
-        }
+        .hero-content { animation: fadeInLeft 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
         @keyframes fadeInLeft {
             from { opacity: 0; transform: translateX(-40px); }
             to   { opacity: 1; transform: translateX(0); }
@@ -266,25 +233,10 @@
             color: var(--light);
             letter-spacing: -1.5px;
         }
-        .hero-title .highlight {
-            color: var(--highlight);
-            display: block;
-            font-style: italic;
-        }
+        .hero-title .highlight { color: var(--highlight); display: block; font-style: italic; }
 
-        .hero-subtitle {
-            font-size: var(--step-2);
-            color: var(--text-muted);
-            margin-bottom: var(--space-sm);
-            font-weight: 300;
-        }
-
-        .hero-description {
-            font-size: var(--step-1);
-            color: var(--text);
-            margin-bottom: var(--space-lg);
-            line-height: 1.8;
-        }
+        .hero-subtitle { font-size: var(--step-2); color: var(--text-muted); margin-bottom: var(--space-sm); font-weight: 300; }
+        .hero-description { font-size: var(--step-1); color: var(--text); margin-bottom: var(--space-lg); line-height: 1.8; }
 
         .cta-button {
             display: inline-flex;
@@ -302,21 +254,13 @@
             cursor: pointer;
             text-decoration: none;
             transition: transform 0.25s, box-shadow 0.25s;
-            box-shadow: 0 8px 28px rgba(50, 130, 184, 0.32);
+            box-shadow: 0 8px 28px rgba(50,130,184,0.32);
             white-space: nowrap;
         }
-        .cta-button:hover,
-        .cta-button:focus {
-            transform: translateY(-3px);
-            box-shadow: 0 14px 38px rgba(50, 130, 184, 0.5);
-            outline: none;
-        }
+        .cta-button:hover, .cta-button:focus { transform: translateY(-3px); box-shadow: 0 14px 38px rgba(50,130,184,0.5); outline: none; }
         .cta-button:active { transform: translateY(-1px); }
 
-        /* ── Formula card ── */
-        .hero-visual {
-            animation: fadeInRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
-        }
+        .hero-visual { animation: fadeInRight 0.8s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
         @keyframes fadeInRight {
             from { opacity: 0; transform: translateX(40px); }
             to   { opacity: 1; transform: translateX(0); }
@@ -331,9 +275,17 @@
             padding: var(--space-lg);
             box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
         }
+        .formula-container::before {
+            content: '';
+            display: block;
+            width: 40px; height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--highlight));
+            border-radius: 2px;
+            margin: 0 auto var(--space-md);
+        }
 
         .formula {
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-family: 'JetBrains Mono', monospace;
             font-size: clamp(1rem, 3vw, 2.2rem);
             text-align: center;
             color: var(--light);
@@ -343,31 +295,11 @@
             word-break: break-all;
             line-height: 1.5;
         }
-        .formula sub {
-            font-size: 0.65em;
-            vertical-align: sub;
-        }
-
-        .formula-label {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: var(--step-0);
-            font-style: italic;
-        }
-
-        /* Formula decorative dots */
-        .formula-container::before {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--highlight));
-            border-radius: 2px;
-            margin: 0 auto var(--space-md);
-        }
+        .formula sub { font-size: 0.65em; vertical-align: sub; }
+        .formula-label { text-align: center; color: var(--text-muted); font-size: var(--step-0); font-style: italic; }
 
         /* ═══════════════════════════════════════
-           FEATURES SECTION
+           FEATURES
         ═══════════════════════════════════════ */
         .features {
             padding: var(--space-2xl) clamp(1rem, 5vw, 4rem);
@@ -401,12 +333,12 @@
         }
 
         .feature-card {
-            background: rgba(26, 26, 46, 0.55);
+            background: rgba(26,26,46,0.55);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             padding: var(--space-lg);
-            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s, box-shadow 0.3s;
-            animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+            transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
             position: relative;
             overflow: hidden;
         }
@@ -430,23 +362,9 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        .feature-icon {
-            font-size: clamp(2rem, 4vw, 2.8rem);
-            margin-bottom: var(--space-sm);
-            line-height: 1;
-        }
-        .feature-title {
-            font-family: 'Playfair Display', serif;
-            font-size: var(--step-2);
-            font-weight: 700;
-            margin-bottom: var(--space-xs);
-            color: var(--light);
-        }
-        .feature-description {
-            font-size: var(--step-0);
-            color: var(--text-muted);
-            line-height: 1.72;
-        }
+        .feature-icon { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: var(--space-sm); line-height: 1; }
+        .feature-title { font-family: 'Playfair Display', serif; font-size: var(--step-2); font-weight: 700; margin-bottom: var(--space-xs); color: var(--light); }
+        .feature-description { font-size: var(--step-0); color: var(--text-muted); line-height: 1.72; }
 
         /* ═══════════════════════════════════════
            CALCULATOR PAGE
@@ -456,21 +374,12 @@
             min-height: 100dvh;
             padding: calc(var(--nav-h) + var(--space-xl)) clamp(1rem, 5vw, 4rem) var(--space-xl);
         }
-        .calculator-page.active {
-            display: block;
-            animation: fadeIn 0.4s ease-out both;
-        }
+        .calculator-page.active { display: block; animation: fadeIn 0.4s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .calculator-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .calculator-container { max-width: 1200px; margin: 0 auto; }
 
-        .calculator-header {
-            text-align: center;
-            margin-bottom: var(--space-xl);
-        }
+        .calculator-header { text-align: center; margin-bottom: var(--space-xl); }
         .calculator-title {
             font-family: 'Playfair Display', serif;
             font-size: var(--step-4);
@@ -479,12 +388,8 @@
             margin-bottom: var(--space-xs);
             letter-spacing: -0.5px;
         }
-        .calculator-subtitle {
-            font-size: var(--step-1);
-            color: var(--text-muted);
-        }
+        .calculator-subtitle { font-size: var(--step-1); color: var(--text-muted); }
 
-        /* ── Two-column → single-column grid ── */
         .calculator-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -492,16 +397,13 @@
             margin-bottom: var(--space-lg);
         }
 
-        /* ── Shared card style ── */
-        .input-section,
-        .output-section {
+        .input-section, .output-section {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 2px solid var(--border);
             border-radius: var(--radius-xl);
             padding: var(--space-lg);
-            /* Prevent internal overflow from escaping */
             min-width: 0;
             overflow: hidden;
         }
@@ -516,7 +418,6 @@
             border-bottom: 2px solid var(--highlight);
         }
 
-        /* ── Input fields ── */
         .input-group { margin-bottom: var(--space-sm); }
         .input-group label {
             display: block;
@@ -530,24 +431,17 @@
             width: 100%;
             padding: clamp(0.55rem, 1.2vw, 0.9rem) clamp(0.7rem, 1.5vw, 1rem);
             background: var(--input-bg);
-            border: 1.5px solid rgba(50, 130, 184, 0.28);
+            border: 1.5px solid rgba(50,130,184,0.28);
             border-radius: var(--radius-md);
             color: var(--text);
             font-family: 'JetBrains Mono', monospace;
             font-size: var(--step-0);
             transition: border-color 0.25s, box-shadow 0.25s;
-            /* Prevent zoom on iOS (font-size ≥ 16px equivalent) */
             -webkit-appearance: none;
             appearance: none;
         }
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--highlight);
-            box-shadow: 0 0 0 3px rgba(50, 130, 184, 0.18);
-        }
-        .input-group input::placeholder { color: rgba(160, 160, 160, 0.55); }
-
-        /* Number inputs — hide spinners for cleaner mobile look */
+        .input-group input:focus { outline: none; border-color: var(--highlight); box-shadow: 0 0 0 3px rgba(50,130,184,0.18); }
+        .input-group input::placeholder { color: rgba(160,160,160,0.55); }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { opacity: 0.4; }
 
@@ -565,18 +459,13 @@
             cursor: pointer;
             transition: transform 0.22s, box-shadow 0.22s, filter 0.22s;
             margin-top: var(--space-sm);
-            box-shadow: 0 6px 20px rgba(50, 130, 184, 0.28);
+            box-shadow: 0 6px 20px rgba(50,130,184,0.28);
             letter-spacing: 0.3px;
         }
-        .calculate-btn:hover,
-        .calculate-btn:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(50, 130, 184, 0.42);
-            outline: none;
-        }
+        .calculate-btn:hover, .calculate-btn:focus { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(50,130,184,0.42); outline: none; }
         .calculate-btn:active { transform: translateY(0); filter: brightness(0.92); }
 
-        /* ── Results ── */
+        /* Results */
         .result-display {
             background: var(--input-bg);
             border-radius: var(--radius-md);
@@ -584,72 +473,29 @@
             margin-bottom: var(--space-sm);
             border-left: 4px solid var(--highlight);
         }
-        .result-label {
-            font-size: var(--step--1);
-            color: var(--text-muted);
-            margin-bottom: 3px;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .result-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: var(--step-2);
-            color: var(--light);
-            font-weight: 500;
-            word-break: break-all;
-            overflow-wrap: anywhere;
-        }
+        .result-label { font-size: var(--step--1); color: var(--text-muted); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1.2px; font-family: 'JetBrains Mono', monospace; }
+        .result-value { font-family: 'JetBrains Mono', monospace; font-size: var(--step-2); color: var(--light); font-weight: 500; word-break: break-all; overflow-wrap: anywhere; }
 
-        /* ── Iterations table — horizontally scrollable on mobile ── */
-        .iterations-table {
-            margin-top: var(--space-md);
-            /* The outer wrapper scrolls, not the page */
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            /* Subtle scroll hint shadow */
-            background:
-                linear-gradient(to right, var(--input-bg) 30%, transparent),
-                linear-gradient(to right, transparent, var(--input-bg) 70%) 100% 0,
-                radial-gradient(farthest-side at 0% 50%, rgba(50,130,184,0.18), transparent),
-                radial-gradient(farthest-side at 100% 50%, rgba(50,130,184,0.18), transparent) 100% 0;
-            background-repeat: no-repeat;
-            background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
-            background-attachment: local, local, scroll, scroll;
-        }
-        .iterations-table table {
-            width: 100%;
-            border-collapse: collapse;
-            /* Minimum width prevents squishing; table scrolls instead */
-            min-width: 400px;
-            font-size: var(--step--1);
-        }
+        /* Iterations summary table */
+        .iterations-table { margin-top: var(--space-md); overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-md); border: 1px solid var(--border); }
+        .iterations-table table { width: 100%; border-collapse: collapse; min-width: 400px; font-size: var(--step--1); }
         .iterations-table thead { position: sticky; top: 0; z-index: 1; }
         .iterations-table th,
         .iterations-table td {
             padding: clamp(0.45rem, 1vw, 0.85rem) clamp(0.5rem, 1.2vw, 1rem);
             text-align: left;
-            border-bottom: 1px solid rgba(50, 130, 184, 0.15);
+            border-bottom: 1px solid rgba(50,130,184,0.15);
             white-space: nowrap;
             font-family: 'JetBrains Mono', monospace;
         }
-        .iterations-table th {
-            background: rgba(15, 76, 117, 0.55);
-            color: var(--light);
-            font-weight: 600;
-            font-size: var(--step--1);
-            letter-spacing: 0.3px;
-        }
+        .iterations-table th { background: rgba(15,76,117,0.55); color: var(--light); font-weight: 600; font-size: var(--step--1); letter-spacing: 0.3px; }
         .iterations-table td { color: var(--text); }
-        .iterations-table tbody tr:hover { background: rgba(50, 130, 184, 0.07); }
+        .iterations-table tbody tr:hover { background: rgba(50,130,184,0.07); }
         .iterations-table tbody tr:last-child td { border-bottom: none; }
 
-        /* ── Error message ── */
         .error-message {
-            background: rgba(239, 83, 80, 0.12);
-            border: 1px solid rgba(239, 83, 80, 0.5);
+            background: rgba(239,83,80,0.12);
+            border: 1px solid rgba(239,83,80,0.5);
             border-radius: var(--radius-md);
             padding: var(--space-sm) var(--space-md);
             color: #ff8a88;
@@ -661,7 +507,7 @@
         }
         .error-message::before { content: '⚠'; flex-shrink: 0; }
 
-        /* ── Visualization panel ── */
+        /* Convergence chart */
         .visualization {
             margin-top: var(--space-lg);
             background: var(--card-bg);
@@ -672,195 +518,340 @@
             padding: var(--space-lg);
             overflow: hidden;
         }
+        canvas { display: block; width: 100% !important; height: clamp(180px, 35vw, 380px) !important; border-radius: var(--radius-md); }
 
-        /* Canvas fills its container; height adapts via clamp */
-        canvas {
-            display: block;
-            width: 100% !important;
-            height: clamp(180px, 35vw, 380px) !important;
-            border-radius: var(--radius-md);
-        }
-
-        /* ── Placeholder text ── */
-        .placeholder-text {
-            color: var(--text-muted);
-            text-align: center;
-            padding: clamp(1.5rem, 6vw, 3.5rem) var(--space-md);
-            font-size: var(--step-0);
-            font-style: italic;
-            line-height: 1.7;
-        }
-
-        /* ── Utility ── */
-        .hidden { display: none !important; }
+        .placeholder-text { color: var(--text-muted); text-align: center; padding: clamp(1.5rem,6vw,3.5rem) var(--space-md); font-size: var(--step-0); font-style: italic; line-height: 1.7; }
 
         /* ═══════════════════════════════════════
-           RESPONSIVE BREAKPOINTS
+           STEP-BY-STEP SECTION  ← NEW
         ═══════════════════════════════════════ */
-
-        /* ── Large tablet / small laptop ── */
-        @media (max-width: 1100px) {
-            .hero-title { letter-spacing: -1px; }
+        .steps-section {
+            margin-top: var(--space-lg);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            overflow: hidden;
         }
 
-        /* ── Tablet portrait — stack hero ── */
+        /* Collapsible toggle row */
+        .steps-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            cursor: pointer;
+            user-select: none;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 0;
+        }
+        .steps-toggle:focus { outline: 2px solid var(--highlight); border-radius: 4px; }
+
+        .steps-toggle-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px; height: 32px;
+            background: rgba(50,130,184,0.15);
+            border-radius: 50%;
+            color: var(--light);
+            font-size: 1.1rem;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), background 0.25s;
+            flex-shrink: 0;
+        }
+        .steps-toggle.open .steps-toggle-icon { transform: rotate(180deg); background: rgba(50,130,184,0.28); }
+
+        .steps-body {
+            display: none;
+            margin-top: var(--space-md);
+        }
+        .steps-body.open { display: block; animation: stepsReveal 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+        @keyframes stepsReveal {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Iteration cards */
+        .iter-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--space-md);
+            transition: box-shadow 0.3s;
+        }
+        .iter-card:last-child { margin-bottom: 0; }
+        .iter-card:hover { box-shadow: 0 8px 30px rgba(50,130,184,0.14); }
+
+        /* Card header bar */
+        .iter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: clamp(0.6rem, 1.5vw, 0.9rem) clamp(0.9rem, 2vw, 1.4rem);
+            background: linear-gradient(135deg, rgba(15,76,117,0.7), rgba(50,130,184,0.3));
+            border-bottom: 1px solid var(--border);
+        }
+        .iter-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .iter-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px; height: 32px;
+            background: rgba(50,130,184,0.35);
+            border: 1px solid rgba(50,130,184,0.55);
+            border-radius: 50%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step--1);
+            font-weight: 500;
+            color: var(--light);
+            flex-shrink: 0;
+            padding: 0 6px;
+        }
+        .iter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: var(--step-1);
+            font-weight: 700;
+            color: var(--light);
+        }
+        .iter-status-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step--1);
+            padding: 3px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .iter-status-badge.converged { background: rgba(76,175,80,0.18); border: 1px solid rgba(76,175,80,0.5); color: #81c784; }
+        .iter-status-badge.running   { background: rgba(50,130,184,0.18); border: 1px solid rgba(50,130,184,0.4); color: var(--light); }
+
+        /* Card body */
+        .iter-body {
+            padding: clamp(0.9rem, 2vw, 1.4rem);
+            background: rgba(12,16,32,0.45);
+            display: grid;
+            gap: var(--space-sm);
+        }
+
+        /* Individual step row */
+        .calc-step {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.6rem 1rem;
+            align-items: start;
+        }
+
+        .step-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step--1);
+            font-weight: 500;
+            color: var(--highlight);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding-top: 2px;
+            white-space: nowrap;
+        }
+
+        .step-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        /* Math expression line */
+        .math-line {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step-0);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-wrap: break-word;
+            word-break: break-all;
+        }
+        .math-line .math-val   { color: #90caf9; }     /* x values — blue  */
+        .math-line .math-fn    { color: #ce93d8; }     /* function values — purple */
+        .math-line .math-deriv { color: #80cbc4; }     /* derivative — teal */
+        .math-line .math-res   { color: #a5d6a7; font-weight: 500; }  /* result — green */
+        .math-line .math-op    { color: var(--text-muted); }           /* operators */
+
+        /* Divider between sub-steps */
+        .step-divider {
+            height: 1px;
+            background: rgba(50,130,184,0.12);
+            margin: 2px 0;
+        }
+
+        /* Formula box inside a step */
+        .formula-box {
+            background: rgba(50,130,184,0.08);
+            border: 1px solid rgba(50,130,184,0.2);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step-0);
+            color: var(--light);
+            overflow-wrap: break-word;
+            word-break: break-all;
+        }
+
+        /* Result highlight row */
+        .result-highlight {
+            background: linear-gradient(135deg, rgba(50,130,184,0.14), rgba(76,175,80,0.1));
+            border: 1px solid rgba(76,175,80,0.3);
+            border-radius: var(--radius-md);
+            padding: clamp(0.6rem, 1.5vw, 1rem) clamp(0.9rem, 2vw, 1.4rem);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .result-highlight-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step--1);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .result-highlight-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step-2);
+            color: #a5d6a7;
+            font-weight: 500;
+        }
+        .result-highlight-error {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: var(--step--1);
+            color: var(--text-muted);
+        }
+
+        /* Convergence notice */
+        .converged-notice {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(76,175,80,0.1);
+            border: 1px solid rgba(76,175,80,0.35);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-sm);
+            font-size: var(--step-0);
+            color: #81c784;
+        }
+        .converged-notice .icon { font-size: 1.3rem; flex-shrink: 0; }
+
+        /* ═══════════════════════════════════════
+           UTILITIES & RESPONSIVE
+        ═══════════════════════════════════════ */
+        .hidden { display: none !important; }
+
         @media (max-width: 860px) {
-            .hero {
-                grid-template-columns: 1fr;
-                gap: var(--space-lg);
-                text-align: center;
-            }
+            .hero { grid-template-columns: 1fr; gap: var(--space-lg); text-align: center; }
             .hero-visual { order: 2; max-width: 520px; margin: 0 auto; width: 100%; }
             .hero-content { order: 1; }
             .cta-button { display: inline-flex; }
-
-            /* Stack calculator panels */
             .calculator-grid { grid-template-columns: 1fr; }
         }
 
-        /* ── Mobile — hamburger, compact everything ── */
         @media (max-width: 640px) {
-            :root {
-                --nav-h: 58px;
-            }
-
-            /* Show hamburger, hide desktop links */
-            .hamburger  { display: flex; }
+            :root { --nav-h: 58px; }
+            .hamburger { display: flex; }
             .nav-links  { display: none; }
-
-            /* Full-width CTA */
             .cta-button { width: 100%; }
-
-            /* Ensure table is readable with scroll hint visible */
-            .iterations-table { border-radius: var(--radius-sm); }
-
-            /* Tighten card padding on mobile */
-            .input-section,
-            .output-section,
-            .visualization {
-                border-radius: var(--radius-lg);
-                padding: var(--space-md);
-            }
-
-            /* Features single column */
+            .input-section, .output-section, .visualization, .steps-section { border-radius: var(--radius-lg); padding: var(--space-md); }
             .features-grid { grid-template-columns: 1fr; }
+            .calculator-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .calc-step { grid-template-columns: 1fr; }
+            .step-label { padding-top: 0; }
         }
 
-        /* ── Small phones (320–400px) ── */
         @media (max-width: 400px) {
             .formula { font-size: clamp(0.85rem, 4vw, 1.1rem); }
-            .hero-title { letter-spacing: -0.5px; }
-
-            /* Prevent table columns from wrapping oddly */
             .iterations-table table { min-width: 340px; }
-
-            .input-section,
-            .output-section,
-            .formula-container,
-            .visualization {
-                border-radius: var(--radius-md);
-            }
         }
 
-        /* ── Touch devices — increase tap targets ── */
         @media (hover: none) and (pointer: coarse) {
             .input-group input { padding: 0.85rem 0.9rem; font-size: 1rem; }
             .calculate-btn     { padding: 1rem; font-size: 1.05rem; }
-            .mobile-menu a     { padding: 1rem 0; }
         }
 
-        /* ── Reduced motion ── */
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ═══ NAVIGATION ═══ -->
+    <!-- NAVIGATION -->
     <nav role="banner">
         <div class="logo" aria-label="Newton-Raphson">Newton<em>Raphson</em></div>
-
         <ul class="nav-links" role="list">
-            <li><a href="#" data-page="landing" aria-label="Home">Home</a></li>
-            <li><a href="#" data-page="calculator" aria-label="Calculator">Calculator</a></li>
+            <li><a href="#" data-page="landing">Home</a></li>
+            <li><a href="#" data-page="calculator">Calculator</a></li>
         </ul>
-
         <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu">
             <span></span><span></span><span></span>
         </button>
     </nav>
 
-    <!-- ═══ MOBILE MENU ═══ -->
     <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
         <a href="#" data-page="landing">Home</a>
         <a href="#" data-page="calculator">Calculator</a>
     </nav>
 
-    <!-- ═══ LANDING ═══ -->
+    <!-- LANDING -->
     <section class="landing" id="landing-page" aria-label="Hero section">
         <div class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">
-                    Find Roots
-                    <span class="highlight">with Precision</span>
-                </h1>
+                <h1 class="hero-title">Find Roots <span class="highlight">with Precision</span></h1>
                 <p class="hero-subtitle">Advanced numerical root-finding algorithm</p>
                 <p class="hero-description">
-                    The Newton-Raphson method is a powerful iterative technique for finding
-                    successively better approximations to the roots of a real-valued function.
-                    Experience fast convergence and mathematical elegance.
+                    The Newton-Raphson method is a powerful iterative technique for finding successively
+                    better approximations to the roots of a real-valued function. Experience fast convergence
+                    and mathematical elegance.
                 </p>
-                <a href="#" class="cta-button" data-page="calculator" role="button">
-                    Start Computing →
-                </a>
+                <a href="#" class="cta-button" data-page="calculator" role="button">Start Computing →</a>
             </div>
             <div class="hero-visual">
                 <div class="formula-container" role="img" aria-label="Newton-Raphson iterative formula">
-                    <div class="formula">
-                        x<sub>n+1</sub> = x<sub>n</sub> &minus; f(x<sub>n</sub>) / f&prime;(x<sub>n</sub>)
-                    </div>
+                    <div class="formula">x<sub>n+1</sub> = x<sub>n</sub> &minus; f(x<sub>n</sub>) / f&prime;(x<sub>n</sub>)</div>
                     <p class="formula-label">The iterative formula for convergence</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ FEATURES ═══ -->
+    <!-- FEATURES -->
     <section class="features" aria-labelledby="features-heading">
         <h2 class="section-title" id="features-heading">Why Newton-Raphson?</h2>
         <div class="features-grid" role="list">
             <article class="feature-card" role="listitem">
                 <div class="feature-icon" aria-hidden="true">⚡</div>
                 <h3 class="feature-title">Rapid Convergence</h3>
-                <p class="feature-description">
-                    Achieves quadratic convergence near the root, making it one of the fastest
-                    root-finding algorithms available for smooth functions.
-                </p>
+                <p class="feature-description">Achieves quadratic convergence near the root, making it one of the fastest root-finding algorithms available for smooth functions.</p>
             </article>
             <article class="feature-card" role="listitem">
                 <div class="feature-icon" aria-hidden="true">🎯</div>
                 <h3 class="feature-title">High Precision</h3>
-                <p class="feature-description">
-                    Delivers accurate results with minimal iterations, perfect for applications
-                    requiring exact solutions in engineering and scientific computing.
-                </p>
+                <p class="feature-description">Delivers accurate results with minimal iterations, perfect for applications requiring exact solutions in engineering and scientific computing.</p>
             </article>
             <article class="feature-card" role="listitem">
                 <div class="feature-icon" aria-hidden="true">📊</div>
                 <h3 class="feature-title">Iterative Insight</h3>
-                <p class="feature-description">
-                    Track the convergence process step-by-step with detailed iteration tables
-                    and visualizations for deep mathematical understanding.
-                </p>
+                <p class="feature-description">Track the convergence process step-by-step with detailed iteration cards and visualizations for deep mathematical understanding.</p>
             </article>
         </div>
     </section>
 
-    <!-- ═══ CALCULATOR ═══ -->
+    <!-- CALCULATOR -->
     <section class="calculator-page" id="calculator-page" aria-label="Calculator">
         <div class="calculator-container">
 
@@ -870,53 +861,34 @@
             </header>
 
             <div class="calculator-grid">
-
                 <!-- Input panel -->
                 <div class="input-section">
                     <h2 class="section-heading">Input Parameters</h2>
 
                     <div class="input-group">
                         <label for="func">Function f(x)</label>
-                        <input type="text" id="func"
-                               placeholder="e.g., x^3 - 2*x - 5"
-                               value="x^3 - 2*x - 5"
+                        <input type="text" id="func" placeholder="e.g., x^3 - 2*x - 5" value="x^3 - 2*x - 5"
                                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                     </div>
-
                     <div class="input-group">
                         <label for="derivative">Derivative f&prime;(x) <span style="color:var(--text-muted);font-weight:300">(optional)</span></label>
-                        <input type="text" id="derivative"
-                               placeholder="e.g., 3*x^2 - 2  (auto if blank)"
+                        <input type="text" id="derivative" placeholder="e.g., 3*x^2 - 2  (auto if blank)"
                                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                     </div>
-
                     <div class="input-group">
                         <label for="initial">Initial Guess (x&#8320;)</label>
-                        <input type="number" id="initial"
-                               placeholder="e.g., 2"
-                               value="2" step="0.1"
-                               inputmode="decimal">
+                        <input type="number" id="initial" placeholder="e.g., 2" value="2" step="0.1" inputmode="decimal">
                     </div>
-
                     <div class="input-group">
                         <label for="decimalPlaces">Decimal Places</label>
-                        <input type="number" id="decimalPlaces"
-                               placeholder="1 – 15"
-                               value="6" min="1" max="15"
-                               inputmode="numeric">
+                        <input type="number" id="decimalPlaces" placeholder="1 – 15" value="6" min="1" max="15" inputmode="numeric">
                     </div>
-
                     <div class="input-group">
                         <label for="maxIterations">Maximum Iterations</label>
-                        <input type="number" id="maxIterations"
-                               placeholder="e.g., 50"
-                               value="50" min="1"
-                               inputmode="numeric">
+                        <input type="number" id="maxIterations" placeholder="e.g., 50" value="50" min="1" inputmode="numeric">
                     </div>
 
-                    <button class="calculate-btn" onclick="calculate()" type="button">
-                        Calculate Root
-                    </button>
+                    <button class="calculate-btn" id="calcBtn" type="button">Calculate Root</button>
                 </div>
 
                 <!-- Output panel -->
@@ -929,8 +901,7 @@
                         </p>
                     </div>
                 </div>
-
-            </div><!-- /.calculator-grid -->
+            </div>
 
             <!-- Convergence chart -->
             <div class="visualization hidden" id="visualization">
@@ -938,20 +909,28 @@
                 <canvas id="convergenceChart" role="img" aria-label="Error convergence chart"></canvas>
             </div>
 
-        </div><!-- /.calculator-container -->
+            <!-- ★ STEP-BY-STEP SECTION ★ -->
+            <div class="steps-section hidden" id="stepsSection">
+                <button class="steps-toggle" id="stepsToggle" aria-expanded="false" aria-controls="stepsBody">
+                    <h2 class="section-heading" style="margin:0;border:none;padding:0">Step-by-Step Calculation</h2>
+                    <span class="steps-toggle-icon" aria-hidden="true">▼</span>
+                </button>
+                <div class="steps-body" id="stepsBody" role="region" aria-label="Step-by-step iteration details">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </div>
     </section>
 
-    <!-- ═══════════════════════════════════════
-         JAVASCRIPT
-    ═══════════════════════════════════════ -->
     <script>
     'use strict';
 
-    /* ─────────────────────────────────────────
+    /* ═══════════════════════════════════════════
        HAMBURGER / MOBILE MENU
-    ───────────────────────────────────────── */
-    const hamburger  = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
+    ═══════════════════════════════════════════ */
+    const hamburger   = document.getElementById('hamburger');
+    const mobileMenu  = document.getElementById('mobile-menu');
 
     hamburger.addEventListener('click', () => {
         const isOpen = mobileMenu.classList.toggle('open');
@@ -964,23 +943,22 @@
         hamburger.classList.remove('open');
         hamburger.setAttribute('aria-expanded', 'false');
     }
-
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileMenu));
 
-    /* ─────────────────────────────────────────
+    /* ═══════════════════════════════════════════
        PAGE NAVIGATION
-    ───────────────────────────────────────── */
-    const landingPage    = document.getElementById('landing-page');
+    ═══════════════════════════════════════════ */
+    const landingPage     = document.getElementById('landing-page');
     const featuresSection = document.querySelector('.features');
-    const calculatorPage = document.getElementById('calculator-page');
+    const calculatorPage  = document.getElementById('calculator-page');
 
     function showPage(page) {
         if (page === 'landing') {
-            landingPage.style.display    = 'flex';
+            landingPage.style.display     = 'flex';
             featuresSection.style.display = 'block';
             calculatorPage.classList.remove('active');
         } else if (page === 'calculator') {
-            landingPage.style.display    = 'none';
+            landingPage.style.display     = 'none';
             featuresSection.style.display = 'none';
             calculatorPage.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -988,23 +966,30 @@
         closeMobileMenu();
     }
 
-    document.querySelectorAll('[data-page]').forEach(el => {
-        el.addEventListener('click', e => {
-            e.preventDefault();
-            showPage(e.currentTarget.getAttribute('data-page'));
-        });
+    document.querySelectorAll('[data-page]').forEach(el =>
+        el.addEventListener('click', e => { e.preventDefault(); showPage(e.currentTarget.getAttribute('data-page')); })
+    );
+
+    /* ═══════════════════════════════════════════
+       STEP-BY-STEP COLLAPSIBLE TOGGLE
+    ═══════════════════════════════════════════ */
+    const stepsToggle = document.getElementById('stepsToggle');
+    const stepsBody   = document.getElementById('stepsBody');
+
+    stepsToggle.addEventListener('click', () => {
+        const isOpen = stepsBody.classList.toggle('open');
+        stepsToggle.classList.toggle('open', isOpen);
+        stepsToggle.setAttribute('aria-expanded', String(isOpen));
     });
 
-    /* ─────────────────────────────────────────
+    /* ═══════════════════════════════════════════
        EXPRESSION PARSER
-    ───────────────────────────────────────── */
+    ═══════════════════════════════════════════ */
     function parseExpression(expr) {
-        // Protect 'exp(...)' before swapping bare 'e'
         expr = expr.replace(/\bexp\b/gi, '__EXP__');
-        // Euler's number — only when standing alone
-        expr = expr.replace(/\be\b/g, 'Math.E');
-        expr = expr.replace(/__EXP__/g, 'Math.exp');
-        expr = expr.replace(/\^/g, '**');
+        expr = expr.replace(/\be\b/g,    'Math.E');
+        expr = expr.replace(/__EXP__/g,  'Math.exp');
+        expr = expr.replace(/\^/g,       '**');
         expr = expr.replace(/\bsin\b/gi,  'Math.sin');
         expr = expr.replace(/\bcos\b/gi,  'Math.cos');
         expr = expr.replace(/\btan\b/gi,  'Math.tan');
@@ -1013,22 +998,44 @@
         expr = expr.replace(/\bsqrt\b/gi, 'Math.sqrt');
         expr = expr.replace(/\babs\b/gi,  'Math.abs');
         expr = expr.replace(/\bpi\b/gi,   'Math.PI');
-
         // eslint-disable-next-line no-new-func
-        return new Function('x', `"use strict"; try { return ${expr}; } catch(e) { throw new Error('Invalid expression'); }`);
+        return new Function('x', `"use strict"; try { return (${expr}); } catch(e) { throw new Error('Invalid expression'); }`);
     }
 
-    /* ─────────────────────────────────────────
+    /* ═══════════════════════════════════════════
+       PRETTY-PRINT an expression with x substituted
+       Returns a string like: "(2)^3 - 2*(2) - 5"
+    ═══════════════════════════════════════════ */
+    function substituteX(exprStr, xVal, dp) {
+        const xDisplay = formatNum(xVal, dp);
+        // Replace bare 'x' tokens (not part of other words)
+        return exprStr.replace(/\bx\b/g, `(${xDisplay})`);
+    }
+
+    /* ═══════════════════════════════════════════
        NUMERICAL DERIVATIVE
-    ───────────────────────────────────────── */
+    ═══════════════════════════════════════════ */
     function numericalDerivative(f, x, h = 1e-5) {
         return (f(x + h) - f(x - h)) / (2 * h);
     }
 
-    /* ─────────────────────────────────────────
+    /* ═══════════════════════════════════════════
+       NUMBER FORMATTER
+    ═══════════════════════════════════════════ */
+    function formatNum(n, dp) {
+        if (!isFinite(n)) return String(n);
+        // Remove trailing zeros for cleaner display, keep at least 'dp' sig digits
+        const fixed = parseFloat(n.toFixed(dp));
+        // Show a reasonable number of decimals without ugly noise
+        const s = fixed.toString();
+        return s;
+    }
+
+    /* ═══════════════════════════════════════════
        NEWTON-RAPHSON CORE
-    ───────────────────────────────────────── */
-    function newtonRaphson(f, fPrime, x0, tolerance, maxIter) {
+       Returns iterations array with full detail
+    ═══════════════════════════════════════════ */
+    function newtonRaphson(f, fPrime, fStr, fpStr, x0, tolerance, maxIter, dp) {
         const iters = [];
         let x = x0;
 
@@ -1044,7 +1051,18 @@
             const xNew  = x - fx / fpx;
             const error = Math.abs(xNew - x);
 
-            iters.push({ iteration: i + 1, x, fx, fpx, xNew, error });
+            iters.push({
+                iteration : i + 1,
+                x,
+                fx,
+                fpx,
+                xNew,
+                error,
+                // Pretty strings for step-by-step display
+                fSubstituted  : substituteX(fStr,  x, dp),
+                fpSubstituted : substituteX(fpStr || fStr, x, dp),
+                usedNumericFp : !fpStr
+            });
 
             if (error < tolerance)
                 return { root: xNew, iterations: iters, converged: true };
@@ -1054,20 +1072,19 @@
         return { root: x, iterations: iters, converged: false };
     }
 
-    /* ─────────────────────────────────────────
-       CALCULATE (entry point)
-    ───────────────────────────────────────── */
+    /* ═══════════════════════════════════════════
+       MAIN CALCULATE ENTRY POINT
+    ═══════════════════════════════════════════ */
     function calculate() {
         try {
-            // Note: input id changed from 'function' (reserved word) to 'func'
             const functionStr   = document.getElementById('func').value.trim();
             const derivativeStr = document.getElementById('derivative').value.trim();
             const initial       = parseFloat(document.getElementById('initial').value);
             const decPlaces     = parseInt(document.getElementById('decimalPlaces').value, 10);
             const maxIter       = parseInt(document.getElementById('maxIterations').value, 10);
 
-            if (!functionStr)          throw new Error('Please enter a function f(x).');
-            if (isNaN(initial))        throw new Error('Initial guess must be a valid number.');
+            if (!functionStr)   throw new Error('Please enter a function f(x).');
+            if (isNaN(initial)) throw new Error('Initial guess must be a valid number.');
             if (isNaN(decPlaces) || decPlaces < 1 || decPlaces > 15)
                 throw new Error('Decimal places must be between 1 and 15.');
             if (isNaN(maxIter) || maxIter < 1)
@@ -1079,20 +1096,30 @@
                 : xVal => numericalDerivative(f, xVal);
 
             const tolerance = Math.pow(10, -(decPlaces + 2));
-            const result    = newtonRaphson(f, fPrime, initial, tolerance, maxIter);
+            const result    = newtonRaphson(f, fPrime, functionStr, derivativeStr, initial, tolerance, maxIter, decPlaces);
 
             displayResults(result, decPlaces);
+            displaySteps(result, functionStr, derivativeStr, decPlaces);
 
         } catch (err) {
             displayError(err.message || String(err));
+            document.getElementById('stepsSection').classList.add('hidden');
         }
     }
 
-    /* ─────────────────────────────────────────
-       DISPLAY RESULTS
-    ───────────────────────────────────────── */
+    document.getElementById('calcBtn').addEventListener('click', calculate);
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey && calculatorPage.classList.contains('active')
+            && document.activeElement.tagName !== 'TEXTAREA') {
+            calculate();
+        }
+    });
+
+    /* ═══════════════════════════════════════════
+       DISPLAY SUMMARY RESULTS  (top panel)
+    ═══════════════════════════════════════════ */
     function displayResults(result, decPlaces) {
-        window._lastIterations = result.iterations; // store for resize redraws
+        window._lastIterations = result.iterations;
 
         const formattedRoot = result.root.toFixed(decPlaces);
         const statusColor   = result.converged ? 'var(--success)' : 'var(--error)';
@@ -1111,19 +1138,19 @@
                 <div class="result-label">Status</div>
                 <div class="result-value" style="color:${statusColor}">${statusText}</div>
             </div>
-            <div class="iterations-table" role="region" aria-label="Iteration details" tabindex="0">
+            <div class="iterations-table" role="region" aria-label="Iteration summary" tabindex="0">
                 <table>
                     <thead>
                         <tr>
-                            <th scope="col">n</th>
-                            <th scope="col">x<sub>n</sub></th>
-                            <th scope="col">f(x<sub>n</sub>)</th>
-                            <th scope="col">f&prime;(x<sub>n</sub>)</th>
-                            <th scope="col">Error</th>
+                            <th>n</th>
+                            <th>x<sub>n</sub></th>
+                            <th>f(x<sub>n</sub>)</th>
+                            <th>f&prime;(x<sub>n</sub>)</th>
+                            <th>x<sub>n+1</sub></th>
+                            <th>Error</th>
                         </tr>
                     </thead>
-                    <tbody>
-        `;
+                    <tbody>`;
 
         result.iterations.forEach(iter => {
             html += `<tr>
@@ -1131,6 +1158,7 @@
                 <td>${iter.x.toFixed(decPlaces)}</td>
                 <td>${iter.fx.toFixed(decPlaces)}</td>
                 <td>${iter.fpx.toFixed(decPlaces)}</td>
+                <td>${iter.xNew.toFixed(decPlaces)}</td>
                 <td>${iter.error.toExponential(3)}</td>
             </tr>`;
         });
@@ -1140,29 +1168,219 @@
 
         const vizEl = document.getElementById('visualization');
         vizEl.classList.remove('hidden');
-        // Defer draw until layout settles
         requestAnimationFrame(() => drawConvergenceChart(result.iterations));
     }
 
+    /* ═══════════════════════════════════════════
+       ★ DISPLAY STEP-BY-STEP  (main new feature)
+    ═══════════════════════════════════════════ */
+    function displaySteps(result, fStr, fpStr, dp) {
+        const section = document.getElementById('stepsSection');
+        const body    = document.getElementById('stepsBody');
+        const toggle  = document.getElementById('stepsToggle');
+
+        let html = '';
+
+        result.iterations.forEach((iter, idx) => {
+            const n       = iter.iteration;
+            const xN      = iter.x;
+            const xNp1    = iter.xNew;
+            const fxN     = iter.fx;
+            const fpxN    = iter.fpx;
+            const err     = iter.error;
+            const isLast  = idx === result.iterations.length - 1 && result.converged;
+
+            // Subscript helpers
+            const sub  = s => `<sub>${s}</sub>`;
+            const xSub = `x${sub(n - 1)}`;       // x₀, x₁ …
+            const xNxt = `x${sub(n)}`;            // x₁, x₂ …
+
+            // Formatted numbers
+            const xNf   = formatNum(xN,   dp);
+            const fxNf  = formatNum(fxN,  dp);
+            const fpxNf = formatNum(fpxN, dp);
+            const xNp1f = formatNum(xNp1, dp);
+            const errf  = err.toExponential(3);
+
+            // Derivative source note
+            const fpNote = iter.usedNumericFp
+                ? `<span style="color:var(--text-muted);font-size:var(--step--1)"> (numerical)</span>`
+                : '';
+
+            // Build substituted expression strings (clean them up visually)
+            const fSubst  = sanitizeExpr(substituteX(fStr,  xN, dp));
+            const fpSubst = fpStr
+                ? sanitizeExpr(substituteX(fpStr, xN, dp))
+                : `f&prime;(${xNf}) ≈ ${fpxNf}${fpNote}`;
+
+            html += `
+            <div class="iter-card">
+                <!-- Header bar -->
+                <div class="iter-header">
+                    <div class="iter-header-left">
+                        <span class="iter-badge">${n}</span>
+                        <span class="iter-title">Iteration ${n} &nbsp;—&nbsp; ${xSub} = <span style="color:#90caf9">${xNf}</span></span>
+                    </div>
+                    <span class="iter-status-badge ${isLast ? 'converged' : 'running'}">
+                        ${isLast ? '✓ Converged' : `err = ${errf}`}
+                    </span>
+                </div>
+
+                <!-- Body: four numbered steps -->
+                <div class="iter-body">
+
+                    <!-- Step 1: Compute f(xN) -->
+                    <div class="calc-step">
+                        <span class="step-label">Step 1</span>
+                        <div class="step-content">
+                            <span class="math-line">Compute <span class="math-fn">f(${xSub})</span></span>
+                            <div class="formula-box">
+                                f(${xSub}) = f(<span class="math-val">${xNf}</span>)
+                                &nbsp;=&nbsp;
+                                <span class="math-fn">${fSubst}</span>
+                                &nbsp;=&nbsp;
+                                <span class="math-res">${fxNf}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-divider"></div>
+
+                    <!-- Step 2: Compute f'(xN) -->
+                    <div class="calc-step">
+                        <span class="step-label">Step 2</span>
+                        <div class="step-content">
+                            <span class="math-line">Compute <span class="math-deriv">f&prime;(${xSub})</span></span>
+                            <div class="formula-box">
+                                f&prime;(${xSub}) = f&prime;(<span class="math-val">${xNf}</span>)
+                                &nbsp;=&nbsp;
+                                <span class="math-deriv">${fpSubst}</span>
+                                &nbsp;=&nbsp;
+                                <span class="math-res">${fpxNf}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-divider"></div>
+
+                    <!-- Step 3: Substitute into formula -->
+                    <div class="calc-step">
+                        <span class="step-label">Step 3</span>
+                        <div class="step-content">
+                            <span class="math-line">Substitute into Newton-Raphson formula</span>
+                            <div class="formula-box">
+                                ${xNxt} = ${xSub} &minus;
+                                <span class="math-fn">f(${xSub})</span> /
+                                <span class="math-deriv">f&prime;(${xSub})</span>
+                            </div>
+                            <div class="formula-box" style="margin-top:4px">
+                                ${xNxt} = <span class="math-val">${xNf}</span>
+                                &minus;
+                                <span class="math-op">(</span><span class="math-fn">${fxNf}</span><span class="math-op">)</span>
+                                &nbsp;/&nbsp;
+                                <span class="math-op">(</span><span class="math-deriv">${fpxNf}</span><span class="math-op">)</span>
+                            </div>
+                            <div class="formula-box" style="margin-top:4px">
+                                ${xNxt} = <span class="math-val">${xNf}</span>
+                                &minus;
+                                (<span class="math-fn">${formatNum(fxN / fpxN, dp + 2)}</span>)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-divider"></div>
+
+                    <!-- Step 4: Result -->
+                    <div class="calc-step">
+                        <span class="step-label">Step 4</span>
+                        <div class="step-content">
+                            <span class="math-line">New approximation</span>
+                            <div class="result-highlight">
+                                <div>
+                                    <div class="result-highlight-label">${xNxt}</div>
+                                    <div class="result-highlight-value">${xNp1f}</div>
+                                </div>
+                                <div class="result-highlight-error">
+                                    |${xNxt} &minus; ${xSub}| = ${errf}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /.iter-body -->
+            </div><!-- /.iter-card -->`;
+        });
+
+        // Convergence summary
+        if (result.converged) {
+            const last = result.iterations[result.iterations.length - 1];
+            html += `
+            <div class="converged-notice">
+                <span class="icon">✅</span>
+                <span>
+                    Converged after <strong>${result.iterations.length}</strong> iteration${result.iterations.length !== 1 ? 's' : ''}.
+                    Root ≈ <strong style="color:#a5d6a7">${result.root.toFixed(dp)}</strong>
+                    &nbsp;(final error = ${last.error.toExponential(3)})
+                </span>
+            </div>`;
+        } else {
+            html += `
+            <div class="converged-notice" style="background:rgba(239,83,80,0.1);border-color:rgba(239,83,80,0.35);color:#ff8a88;">
+                <span class="icon">⚠</span>
+                <span>Maximum iterations reached without convergence. Best approximation: <strong>${result.root.toFixed(dp)}</strong></span>
+            </div>`;
+        }
+
+        body.innerHTML = html;
+
+        // Auto-open on first calculation
+        if (!body.classList.contains('open')) {
+            body.classList.add('open');
+            toggle.classList.add('open');
+            toggle.setAttribute('aria-expanded', 'true');
+        }
+
+        section.classList.remove('hidden');
+    }
+
     /* ─────────────────────────────────────────
-       DISPLAY ERROR
+       Sanitize expression for display:
+       converts JS syntax back to readable math
     ───────────────────────────────────────── */
+    function sanitizeExpr(expr) {
+        return expr
+            .replace(/Math\.E/g,    'e')
+            .replace(/Math\.exp\(/g,'exp(')
+            .replace(/Math\.sin\(/g,'sin(')
+            .replace(/Math\.cos\(/g,'cos(')
+            .replace(/Math\.tan\(/g,'tan(')
+            .replace(/Math\.log10\(/g,'log(')
+            .replace(/Math\.log\(/g, 'ln(')
+            .replace(/Math\.sqrt\(/g,'√(')
+            .replace(/Math\.abs\(/g, '|')
+            .replace(/Math\.PI/g,   'π')
+            .replace(/\*\*/g,       '^')
+            .replace(/\*/g,         '×');
+    }
+
+    /* ═══════════════════════════════════════════
+       DISPLAY ERROR
+    ═══════════════════════════════════════════ */
     function displayError(message) {
         document.getElementById('results').innerHTML =
             `<div class="error-message">${message}</div>`;
         document.getElementById('visualization').classList.add('hidden');
     }
 
-    /* ─────────────────────────────────────────
+    /* ═══════════════════════════════════════════
        CONVERGENCE CHART
-    ───────────────────────────────────────── */
+    ═══════════════════════════════════════════ */
     function drawConvergenceChart(iterations) {
         const canvas = document.getElementById('convergenceChart');
         const ctx    = canvas.getContext('2d');
         const dpr    = Math.min(window.devicePixelRatio || 1, 3);
 
-        // Measure the CSS box
-        const cssW = canvas.parentElement.clientWidth - 2; // 2px fudge
+        const cssW = canvas.parentElement.clientWidth - 2;
         const cssH = parseInt(getComputedStyle(canvas).height, 10) || 240;
 
         canvas.width  = cssW * dpr;
@@ -1171,25 +1389,23 @@
         canvas.style.height = cssH + 'px';
         ctx.scale(dpr, dpr);
 
-        const W   = cssW;
-        const H   = cssH;
+        const W = cssW, H = cssH;
         const pad = { top: 20, right: 20, bottom: 44, left: Math.max(48, W * 0.09) };
         const plotW = W - pad.left - pad.right;
         const plotH = H - pad.top  - pad.bottom;
 
-        // Background
-        ctx.fillStyle = 'rgba(12, 16, 32, 0.85)';
+        ctx.fillStyle = 'rgba(12,16,32,0.85)';
         ctx.fillRect(0, 0, W, H);
 
         const errors   = iterations.map(i => i.error);
         const maxError = Math.max(...errors) || 1;
         const n        = iterations.length;
 
-        const toX = i    => pad.left + (i / Math.max(n - 1, 1)) * plotW;
-        const toY = err  => pad.top  + plotH - (err / maxError) * plotH;
+        const toX = i   => pad.left + (i / Math.max(n - 1, 1)) * plotW;
+        const toY = err => pad.top  + plotH - (err / maxError) * plotH;
 
-        // Grid lines (subtle)
-        ctx.strokeStyle = 'rgba(50, 130, 184, 0.1)';
+        // Grid lines
+        ctx.strokeStyle = 'rgba(50,130,184,0.1)';
         ctx.lineWidth   = 1;
         for (let i = 1; i <= 4; i++) {
             const y = pad.top + (i / 4) * plotH;
@@ -1197,7 +1413,7 @@
         }
 
         // Axes
-        ctx.strokeStyle = 'rgba(50, 130, 184, 0.45)';
+        ctx.strokeStyle = 'rgba(50,130,184,0.45)';
         ctx.lineWidth   = 1.5;
         ctx.beginPath();
         ctx.moveTo(pad.left, pad.top);
@@ -1205,20 +1421,20 @@
         ctx.lineTo(W - pad.right, H - pad.bottom);
         ctx.stroke();
 
-        // Area fill under line
+        // Area fill
         const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
-        grad.addColorStop(0,   'rgba(50, 130, 184, 0.22)');
-        grad.addColorStop(1,   'rgba(50, 130, 184, 0.02)');
+        grad.addColorStop(0,  'rgba(50,130,184,0.22)');
+        grad.addColorStop(1,  'rgba(50,130,184,0.02)');
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.moveTo(toX(0), toY(errors[0]));
         iterations.forEach((iter, i) => ctx.lineTo(toX(i), toY(iter.error)));
         ctx.lineTo(toX(n - 1), H - pad.bottom);
-        ctx.lineTo(toX(0), H - pad.bottom);
+        ctx.lineTo(toX(0),     H - pad.bottom);
         ctx.closePath();
         ctx.fill();
 
-        // Data line
+        // Line
         ctx.strokeStyle = '#3282b8';
         ctx.lineWidth   = 2.5;
         ctx.lineJoin    = 'round';
@@ -1229,7 +1445,7 @@
         });
         ctx.stroke();
 
-        // Data points
+        // Points
         const r = Math.max(3, Math.min(5.5, W / 100));
         iterations.forEach((iter, i) => {
             ctx.beginPath();
@@ -1241,25 +1457,21 @@
             ctx.stroke();
         });
 
-        // Font size relative to canvas width
         const fs = Math.max(9, Math.min(13, W / 55));
         ctx.fillStyle = '#a0a0a0';
         ctx.font      = `${fs}px 'JetBrains Mono', monospace`;
 
-        // X-axis labels
+        // X labels
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'top';
         const step = Math.max(1, Math.ceil(n / Math.min(8, n)));
         for (let i = 0; i < n; i += step) {
             ctx.fillText(String(i + 1), toX(i), H - pad.bottom + 8);
         }
-
-        // X-axis title
         ctx.fillStyle = '#808080';
-        ctx.font      = `${fs}px 'JetBrains Mono', monospace`;
         ctx.fillText('Iteration', W / 2, H - fs - 2);
 
-        // Y-axis labels
+        // Y labels
         ctx.textAlign    = 'right';
         ctx.textBaseline = 'middle';
         for (let i = 0; i <= 4; i++) {
@@ -1268,46 +1480,24 @@
             ctx.fillText(val, pad.left - 6, y);
         }
 
-        // Y-axis title
         ctx.save();
         ctx.translate(fs + 1, H / 2);
         ctx.rotate(-Math.PI / 2);
-        ctx.textAlign    = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.fillText('Error', 0, 0);
         ctx.restore();
     }
 
-    /* ─────────────────────────────────────────
-       RESIZE — redraw chart
-    ───────────────────────────────────────── */
-    let _resizeRaf = null;
+    // Resize redraw
+    let _raf = null;
     window.addEventListener('resize', () => {
-        cancelAnimationFrame(_resizeRaf);
-        _resizeRaf = requestAnimationFrame(() => {
+        cancelAnimationFrame(_raf);
+        _raf = requestAnimationFrame(() => {
             const viz = document.getElementById('visualization');
-            if (!viz.classList.contains('hidden') && window._lastIterations) {
+            if (!viz.classList.contains('hidden') && window._lastIterations)
                 drawConvergenceChart(window._lastIterations);
-            }
         });
     });
-
-    /* ─────────────────────────────────────────
-       KEYBOARD SHORTCUT — Enter to calculate
-    ───────────────────────────────────────── */
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey && calculatorPage.classList.contains('active')) {
-            // Only if not inside a textarea
-            if (document.activeElement.tagName !== 'TEXTAREA') {
-                calculate();
-            }
-        }
-    });
-
-    /* ─────────────────────────────────────────
-       INITIAL STATE
-    ───────────────────────────────────────── */
-    // Nothing to do — landing page is visible by default via CSS
 
     </script>
 </body>
